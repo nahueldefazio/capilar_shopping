@@ -1,0 +1,11 @@
+Options -Indexes
+
+RewriteEngine On
+
+# Serve existing files or directories directly
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
+RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
+RewriteRule ^ - [L]
+
+# Redirect everything else to index.html (Angular routing)
+RewriteRule ^ /index.html [L]
