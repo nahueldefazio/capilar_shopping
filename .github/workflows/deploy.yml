@@ -30,15 +30,17 @@ jobs:
       - name: Build production
         run: npx ng build --configuration=production
 
+      - name: List build output (debug)
+        run: ls -la dist/browser/
+
       - name: Deploy to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/capilar-shopping/browser/
+          local-dir: ./dist/browser/
           server-dir: /public_html/
-          # Solo sube archivos que cambiaron (usa un archivo de estado en el servidor)
           state-name: .ftp-deploy-sync-state.json
           exclude: |
             **/.git*
