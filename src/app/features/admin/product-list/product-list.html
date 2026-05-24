@@ -1,0 +1,57 @@
+<div class="admin-page">
+  <div class="admin-page__header">
+    <h1 class="admin-page__title">Productos</h1>
+    <a class="btn btn--primary" routerLink="/admin/productos/nuevo">+ Nuevo producto</a>
+  </div>
+
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Imagen</th>
+          <th>Nombre</th>
+          <th>Categoría</th>
+          <th>Tipo</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (product of products(); track product.id) {
+          <tr [class.table-row--inactive]="!product.isActive">
+            <td>
+              <img class="product-thumb" [src]="product.imageUrl" [alt]="product.name" />
+            </td>
+            <td>
+              <strong>{{ product.name }}</strong>
+            </td>
+            <td>{{ product.categoryName }}</td>
+            <td>
+              <span class="sale-type sale-type--{{ product.saleType }}">{{ product.saleType }}</span>
+            </td>
+            <td>{{ product.price | currencyAr }}</td>
+            <td>
+              <span [class.low-stock]="product.stock <= 5 && product.stock > 0"
+                [class.no-stock]="product.stock === 0">
+                {{ product.stock }}
+              </span>
+            </td>
+            <td>
+              <button class="status-toggle" [class.status-toggle--active]="product.isActive"
+                (click)="toggleStatus(product)">
+                {{ product.isActive ? '✅ Activo' : '⛔ Inactivo' }}
+              </button>
+            </td>
+            <td>
+              <div class="table-actions">
+                <a class="btn btn--outline btn--xs" [routerLink]="['/admin/productos/editar', product.id]">Editar</a>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

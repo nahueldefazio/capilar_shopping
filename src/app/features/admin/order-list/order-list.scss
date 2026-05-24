@@ -1,0 +1,69 @@
+.admin-page__count {
+  font-size: 0.875rem;
+  color: #a08070;
+}
+
+.order-customer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+
+  strong {
+    font-size: 0.875rem;
+    color: #2c1810;
+  }
+
+  span {
+    font-size: 0.75rem;
+    color: #a08070;
+  }
+}
+
+.sale-type {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: capitalize;
+
+  &--retail { background: #e8f4e8; color: #2d6a2d; }
+  &--salon { background: #e8e4f4; color: #3d2d7a; }
+  &--wholesale { background: #f4e8d4; color: #7a4a1a; }
+}
+
+.payment-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+
+  &--mercado_pago { color: #009ee3; }
+  &--transfer { color: #5c4033; }
+}
+
+.delivery-badge {
+  font-size: 0.8rem;
+  color: #5c4033;
+  white-space: nowrap;
+}
+
+.status-select {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #e0d4c8;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  background: #fff;
+  cursor: pointer;
+  color: #2c1810;
+  max-width: 150px;
+}
+
+.order-notes-row td {
+  background: #faf6f2;
+  padding: 0.5rem 1rem;
+}
+
+.order-notes {
+  font-size: 0.8rem;
+  color: #7a6050;
+  font-style: italic;
+}

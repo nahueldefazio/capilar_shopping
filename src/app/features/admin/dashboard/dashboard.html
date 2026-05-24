@@ -1,0 +1,91 @@
+<div class="admin-page">
+  <h1 class="admin-page__title">Dashboard</h1>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <span class="stat-card__icon">📦</span>
+      <div class="stat-card__info">
+        <span class="stat-card__value">{{ stats().activeProducts }}</span>
+        <span class="stat-card__label">Productos activos</span>
+        <span class="stat-card__sub">de {{ stats().totalProducts }} totales</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <span class="stat-card__icon">🛒</span>
+      <div class="stat-card__info">
+        <span class="stat-card__value">{{ stats().totalOrders }}</span>
+        <span class="stat-card__label">Pedidos totales</span>
+        <span class="stat-card__sub">{{ stats().pendingOrders }} pendientes</span>
+      </div>
+    </div>
+
+    <div class="stat-card">
+      <span class="stat-card__icon">📅</span>
+      <div class="stat-card__info">
+        <span class="stat-card__value">{{ stats().todayOrders }}</span>
+        <span class="stat-card__label">Pedidos hoy</span>
+        <span class="stat-card__sub">{{ stats().todaySales | currencyAr }} en ventas</span>
+      </div>
+    </div>
+
+    <div class="stat-card stat-card--alert" [class.stat-card--has-alert]="stats().pendingOrders > 0">
+      <span class="stat-card__icon">⚠️</span>
+      <div class="stat-card__info">
+        <span class="stat-card__value">{{ stats().pendingOrders }}</span>
+        <span class="stat-card__label">Requieren atención</span>
+        <span class="stat-card__sub">creados o sin pago</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="admin-section">
+    <div class="admin-section__header">
+      <h2 class="admin-section__title">Pedidos recientes</h2>
+      <a class="btn btn--outline btn--sm" routerLink="/admin/pedidos">Ver todos</a>
+    </div>
+
+    <div class="admin-table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>N° Pedido</th>
+            <th>Cliente</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (order of recentOrders(); track order.id) {
+            <tr>
+              <td><strong>{{ order.orderNumber }}</strong></td>
+              <td>{{ order.customer.fullName }}</td>
+              <td>{{ order.total | currencyAr }}</td>
+              <td><span class="order-status order-status--{{ order.status }}">{{ order.status }}</span></td>
+              <td>{{ order.createdAt | date: 'dd/MM/yyyy' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="admin-quick-actions">
+    <a class="quick-action" routerLink="/admin/productos">
+      <span>📦</span>
+      <strong>Gestionar productos</strong>
+      <span>Agregar, editar y gestionar stock</span>
+    </a>
+    <a class="quick-action" routerLink="/admin/pedidos">
+      <span>🛒</span>
+      <strong>Ver pedidos</strong>
+      <span>Gestionar y actualizar estados</span>
+    </a>
+    <a class="quick-action" routerLink="/admin/productos/nuevo">
+      <span>➕</span>
+      <strong>Nuevo producto</strong>
+      <span>Crear un producto nuevo</span>
+    </a>
+  </div>
+</div>

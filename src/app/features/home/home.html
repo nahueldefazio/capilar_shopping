@@ -1,0 +1,171 @@
+<!-- HERO -->
+<section class="hero">
+  <div class="hero__container">
+    <div class="hero__content">
+      <p class="hero__eyebrow">✂ Productos capilares profesionales</p>
+      <h1 class="hero__title">
+        Lo mejor para tu cabello,<br />
+        <span>para tu peluquería</span><br />
+        y para tu negocio.
+      </h1>
+      <p class="hero__subtitle">
+        Productos capilares de calidad profesional para particulares, peluquerías y mayoristas.
+        Encontrá exactamente lo que necesitás.
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn--primary btn--lg" routerLink="/productos">Ver productos</a>
+        <a class="btn btn--outline btn--lg btn--light" [routerLink]="['/productos']" [queryParams]="{ tipo: 'wholesale' }">
+          Comprar mayorista
+        </a>
+      </div>
+    </div>
+    <div class="hero__image">
+      <div class="hero__image-placeholder">
+        <span>🧴</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORÍAS -->
+<section class="section categories">
+  <div class="container">
+    <h2 class="section__title">Categorías</h2>
+    <div class="categories__grid">
+      <a class="category-card" routerLink="/productos" [queryParams]="{ categoria: 'cuidado-capilar' }">
+        <span class="category-card__icon">🧴</span>
+        <span class="category-card__name">Cuidado Capilar</span>
+      </a>
+      <a class="category-card" routerLink="/productos" [queryParams]="{ categoria: 'tratamientos' }">
+        <span class="category-card__icon">💆</span>
+        <span class="category-card__name">Tratamientos</span>
+      </a>
+      <a class="category-card" routerLink="/productos" [queryParams]="{ tipo: 'salon' }">
+        <span class="category-card__icon">✂</span>
+        <span class="category-card__name">Peluquerías</span>
+      </a>
+      <a class="category-card" routerLink="/productos" [queryParams]="{ tipo: 'wholesale' }">
+        <span class="category-card__icon">📦</span>
+        <span class="category-card__name">Mayorista</span>
+      </a>
+      <a class="category-card" routerLink="/productos" [queryParams]="{ categoria: 'combos' }">
+        <span class="category-card__icon">🎁</span>
+        <span class="category-card__name">Combos</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTOS DESTACADOS -->
+<section class="section">
+  <div class="container">
+    <div class="section__header">
+      <h2 class="section__title">Productos destacados</h2>
+      <a class="section__link" routerLink="/productos">Ver todos →</a>
+    </div>
+
+    <div class="products-grid">
+      @for (product of featuredProducts(); track product.id) {
+        <app-product-card [product]="product" (addToCart)="addToCart($event)" />
+      }
+    </div>
+  </div>
+</section>
+
+<!-- BENEFICIOS -->
+<section class="section benefits">
+  <div class="container">
+    <h2 class="section__title">¿Por qué elegirnos?</h2>
+    <div class="benefits__grid">
+      <div class="benefit-card">
+        <span class="benefit-card__icon">⭐</span>
+        <h3>Calidad profesional</h3>
+        <p>Los mismos productos que usan los mejores salones, ahora disponibles para todos.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-card__icon">🚚</span>
+        <h3>Envío a todo el país</h3>
+        <p>Coordinamos el envío a tu domicilio o retiro, lo que sea más cómodo para vos.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-card__icon">💬</span>
+        <h3>Atención personalizada</h3>
+        <p>Te asesoramos por WhatsApp para que encuentres el producto ideal para tu cabello.</p>
+      </div>
+      <div class="benefit-card">
+        <span class="benefit-card__icon">💰</span>
+        <h3>Precios mayoristas</h3>
+        <p>Accedé a precios especiales para peluquerías y revendedores con compras por volumen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARA PELUQUERÍAS -->
+<section class="section salon-section">
+  <div class="container">
+    <div class="promo-banner promo-banner--salon">
+      <div class="promo-banner__content">
+        <p class="promo-banner__eyebrow">Para peluquerías y salones</p>
+        <h2 class="promo-banner__title">Abastecé tu salón con precios especiales</h2>
+        <p class="promo-banner__text">
+          Packs por 6 unidades, combos armados y precios preferenciales para profesionales.
+          Pedidos mínimos bajos y entrega coordinada.
+        </p>
+        <a class="btn btn--primary" [routerLink]="['/productos']" [queryParams]="{ tipo: 'salon' }">
+          Ver productos para peluquerías
+        </a>
+      </div>
+      <div class="promo-banner__visual">
+        <span>✂</span>
+        <p>Descuentos<br/>para salones</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MAYORISTA -->
+<section class="section">
+  <div class="container">
+    <div class="promo-banner promo-banner--wholesale">
+      <div class="promo-banner__content">
+        <p class="promo-banner__eyebrow">Venta mayorista</p>
+        <h2 class="promo-banner__title">Empezá tu negocio capilar</h2>
+        <p class="promo-banner__text">
+          Cajas por 12 unidades, combos revendedor y los mejores precios del mercado.
+          Ideal para revendedores y distribuidores.
+        </p>
+        <div class="promo-banner__actions">
+          <a class="btn btn--primary" [routerLink]="['/productos']" [queryParams]="{ tipo: 'wholesale' }">
+            Ver productos mayoristas
+          </a>
+          <button class="btn btn--outline btn--light" (click)="openWhatsAppWholesale()">
+            Consultar por WhatsApp
+          </button>
+        </div>
+      </div>
+      <div class="promo-banner__visual">
+        <span>📦</span>
+        <p>Precios<br/>mayoristas</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA WHATSAPP -->
+<section class="section cta-whatsapp">
+  <div class="container">
+    <div class="cta-whatsapp__card">
+      <div class="cta-whatsapp__content">
+        <h2>¿Tenés dudas? ¡Consultanos!</h2>
+        <p>Estamos disponibles por WhatsApp para ayudarte a elegir el producto ideal.</p>
+      </div>
+      <button class="btn btn--whatsapp btn--lg" (click)="openWhatsAppContact()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
+        </svg>
+        Escribirnos por WhatsApp
+      </button>
+    </div>
+  </div>
+</section>

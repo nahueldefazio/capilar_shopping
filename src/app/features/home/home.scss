@@ -1,0 +1,301 @@
+// HERO
+.hero {
+  background: linear-gradient(135deg, #2c1810 0%, #5c3020 60%, #8b4513 100%);
+  color: #fff;
+  padding: 5rem 1rem;
+  position: relative;
+  overflow: hidden;
+
+  &__container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  &__eyebrow {
+    font-size: 0.875rem;
+    color: #c4956a;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__title {
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 1.25rem;
+
+    span {
+      color: #c4956a;
+    }
+  }
+
+  &__subtitle {
+    font-size: 1.05rem;
+    color: #d4b8a0;
+    line-height: 1.65;
+    margin-bottom: 2rem;
+    max-width: 480px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  &__image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__image-placeholder {
+    width: 320px;
+    height: 320px;
+    background: rgba(255, 255, 255, 0.07);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8rem;
+    border: 2px solid rgba(196, 149, 106, 0.3);
+  }
+}
+
+// CATEGORIES
+.categories {
+  background: #faf6f2;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+  }
+}
+
+.category-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem 1rem;
+  background: #fff;
+  border: 1px solid #e8e0d8;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(92, 48, 30, 0.12);
+    transform: translateY(-2px);
+    border-color: #c4956a;
+  }
+
+  &__icon {
+    font-size: 2rem;
+  }
+
+  &__name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #2c1810;
+    text-align: center;
+  }
+}
+
+// BENEFITS
+.benefits {
+  background: #fff;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+.benefit-card {
+  padding: 1.5rem;
+  background: #faf6f2;
+  border-radius: 12px;
+  border: 1px solid #f0e8e0;
+
+  &__icon {
+    font-size: 2rem;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  h3 {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #2c1810;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    font-size: 0.85rem;
+    color: #7a6050;
+    line-height: 1.55;
+    margin: 0;
+  }
+}
+
+// PROMO BANNERS
+.promo-banner {
+  border-radius: 16px;
+  padding: 2.5rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2rem;
+  align-items: center;
+
+  &--salon {
+    background: linear-gradient(135deg, #3d2d7a, #6b52b5);
+    color: #fff;
+  }
+
+  &--wholesale {
+    background: linear-gradient(135deg, #2c1810, #8b4513);
+    color: #fff;
+  }
+
+  &__eyebrow {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    opacity: 0.75;
+    margin-bottom: 0.5rem;
+  }
+
+  &__title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 0.875rem;
+  }
+
+  &__text {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    opacity: 0.85;
+    margin-bottom: 1.5rem;
+    max-width: 480px;
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  &__visual {
+    text-align: center;
+    opacity: 0.2;
+
+    span {
+      font-size: 5rem;
+      display: block;
+    }
+
+    p {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+  }
+}
+
+// CTA WHATSAPP
+.cta-whatsapp {
+  background: #faf6f2;
+
+  &__card {
+    background: #fff;
+    border: 1px solid #e8e0d8;
+    border-radius: 16px;
+    padding: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+  }
+
+  &__content {
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #2c1810;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      color: #7a6050;
+      font-size: 0.95rem;
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .categories__grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .benefits__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 3rem 1rem;
+
+    &__container {
+      grid-template-columns: 1fr;
+    }
+
+    &__image {
+      display: none;
+    }
+  }
+
+  .categories__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .promo-banner {
+    grid-template-columns: 1fr;
+
+    &__visual {
+      display: none;
+    }
+  }
+
+  .cta-whatsapp__card {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .categories__grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .hero__actions {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+      text-align: center;
+    }
+  }
+}

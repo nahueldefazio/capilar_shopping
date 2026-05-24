@@ -1,0 +1,74 @@
+<div class="admin-page">
+  <div class="admin-page__header">
+    <h1 class="admin-page__title">Pedidos</h1>
+    <span class="admin-page__count">{{ orders().length }} pedidos</span>
+  </div>
+
+  <div class="admin-table-wrap">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>N° Pedido</th>
+          <th>Cliente</th>
+          <th>Tipo</th>
+          <th>Total</th>
+          <th>Pago</th>
+          <th>Entrega</th>
+          <th>Estado</th>
+          <th>Fecha</th>
+          <th>Cambiar estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (order of orders(); track order.id) {
+          <tr>
+            <td><strong>{{ order.orderNumber }}</strong></td>
+            <td>
+              <div class="order-customer">
+                <strong>{{ order.customer.fullName }}</strong>
+                <span>{{ order.customer.email }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="sale-type sale-type--{{ order.customer.customerType }}">
+                {{ order.customer.customerType }}
+              </span>
+            </td>
+            <td><strong>{{ order.total | currencyAr }}</strong></td>
+            <td>
+              <span class="payment-badge payment-badge--{{ order.paymentMethod }}">
+                {{ order.paymentMethod === 'mercado_pago' ? 'MercadoPago' : 'Transferencia' }}
+              </span>
+            </td>
+            <td>
+              <span class="delivery-badge">
+                {{ order.deliveryMethod === 'home_delivery' ? '🚚 Domicilio' : order.deliveryMethod === 'pickup' ? '📦 Retiro' : '💬 WhatsApp' }}
+              </span>
+            </td>
+            <td>
+              <span class="order-status order-status--{{ order.status }}">
+                {{ statusLabels[order.status] }}
+              </span>
+            </td>
+            <td>{{ order.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+            <td>
+              <select class="status-select" [value]="order.status"
+                (change)="updateStatus(order, $any($event.target).value)">
+                @for (status of statuses; track status) {
+                  <option [value]="status">{{ statusLabels[status] }}</option>
+                }
+              </select>
+            </td>
+          </tr>
+          @if (order.notes) {
+            <tr class="order-notes-row">
+              <td colspan="9">
+                <span class="order-notes">📝 {{ order.notes }}</span>
+              </td>
+            </tr>
+          }
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

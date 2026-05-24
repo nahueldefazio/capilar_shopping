@@ -1,0 +1,240 @@
+@if (cartStore_.items().length === 0 && !submitting()) {
+  <div class="container empty-checkout">
+    <span>🛒</span>
+    <h2>Tu carrito está vacío</h2>
+    <a class="btn btn--primary" routerLink="/productos">Ver productos</a>
+  </div>
+} @else {
+  <div class="checkout-page">
+    <div class="container">
+      <h1 class="checkout-page__title">Finalizar compra</h1>
+
+      <div class="checkout-layout" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <!-- FORM -->
+        <form class="checkout-form" (ngSubmit)="onSubmit()">
+
+          <!-- Datos personales -->
+          <section class="checkout-section">
+            <h2 class="checkout-section__title">Datos de contacto</h2>
+
+            <div class="form-grid">
+              <div class="form-field form-field--full">
+                <label class="form-label">Nombre completo *</label>
+                <input class="form-input" [class.form-input--error]="isFieldInvalid('fullName')"
+                  type="text" formControlName="fullName" placeholder="María González" />
+                @if (isFieldInvalid('fullName')) {
+                  <span class="form-error">El nombre es obligatorio</span>
+                }
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Email *</label>
+                <input class="form-input" [class.form-input--error]="isFieldInvalid('email')"
+                  type="email" formControlName="email" placeholder="tu@email.com" />
+                @if (isFieldInvalid('email')) {
+                  <span class="form-error">Ingresá un email válido</span>
+                }
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Teléfono *</label>
+                <input class="form-input" [class.form-input--error]="isFieldInvalid('phone')"
+                  type="tel" formControlName="phone" placeholder="1123456789" />
+                @if (isFieldInvalid('phone')) {
+                  <span class="form-error">Ingresá un teléfono válido</span>
+                }
+              </div>
+
+              <div class="form-field form-field--full">
+                <label class="form-label">Tipo de cliente *</label>
+                <div class="radio-group">
+                  <label class="radio-option">
+                    <input type="radio" formControlName="customerType" value="retail" />
+                    <span class="radio-option__label">
+                      <span class="radio-option__title">Particular</span>
+                      <span class="radio-option__desc">Compra para uso personal</span>
+                    </span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" formControlName="customerType" value="salon" />
+                    <span class="radio-option__label">
+                      <span class="radio-option__title">Peluquería</span>
+                      <span class="radio-option__desc">Salón o profesional del rubro</span>
+                    </span>
+                  </label>
+                  <label class="radio-option">
+                    <input type="radio" formControlName="customerType" value="wholesale" />
+                    <span class="radio-option__label">
+                      <span class="radio-option__title">Mayorista</span>
+                      <span class="radio-option__desc">Revendedor o distribuidor</span>
+                    </span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Dirección -->
+          <section class="checkout-section">
+            <h2 class="checkout-section__title">Dirección de entrega</h2>
+
+            <div class="form-grid">
+              <div class="form-field form-field--full">
+                <label class="form-label">Dirección *</label>
+                <input class="form-input" [class.form-input--error]="isFieldInvalid('address')"
+                  type="text" formControlName="address" placeholder="Av. Corrientes 1234, piso 2" />
+                @if (isFieldInvalid('address')) {
+                  <span class="form-error">La dirección es obligatoria</span>
+                }
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Provincia *</label>
+                <select class="form-input form-select" formControlName="province">
+                  <option value="">Seleccioná una provincia</option>
+                  <option>Buenos Aires</option>
+                  <option>Ciudad Autónoma de Buenos Aires</option>
+                  <option>Córdoba</option>
+                  <option>Santa Fe</option>
+                  <option>Mendoza</option>
+                  <option>Tucumán</option>
+                  <option>Entre Ríos</option>
+                  <option>Salta</option>
+                  <option>Misiones</option>
+                  <option>Chaco</option>
+                  <option>Corrientes</option>
+                  <option>Santiago del Estero</option>
+                  <option>San Juan</option>
+                  <option>Jujuy</option>
+                  <option>Río Negro</option>
+                  <option>Neuquén</option>
+                  <option>Formosa</option>
+                  <option>Chubut</option>
+                  <option>San Luis</option>
+                  <option>Catamarca</option>
+                  <option>La Rioja</option>
+                  <option>La Pampa</option>
+                  <option>Santa Cruz</option>
+                  <option>Tierra del Fuego</option>
+                </select>
+                @if (isFieldInvalid('province')) {
+                  <span class="form-error">Seleccioná una provincia</span>
+                }
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Localidad *</label>
+                <input class="form-input" [class.form-input--error]="isFieldInvalid('city')"
+                  type="text" formControlName="city" placeholder="Palermo" />
+                @if (isFieldInvalid('city')) {
+                  <span class="form-error">La localidad es obligatoria</span>
+                }
+              </div>
+
+              <div class="form-field">
+                <label class="form-label">Código postal *</label>
+                <input class="form-input" [class.form-input--error]="isFieldInvalid('postalCode')"
+                  type="text" formControlName="postalCode" placeholder="1043" />
+                @if (isFieldInvalid('postalCode')) {
+                  <span class="form-error">El código postal es obligatorio</span>
+                }
+              </div>
+            </div>
+          </section>
+
+          <!-- Entrega -->
+          <section class="checkout-section">
+            <h2 class="checkout-section__title">Método de entrega</h2>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" formControlName="deliveryMethod" value="home_delivery" />
+                <span class="radio-option__label">
+                  <span class="radio-option__title">🚚 Envío a domicilio</span>
+                  <span class="radio-option__desc">Coordinamos el costo y fecha de envío</span>
+                </span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="deliveryMethod" value="pickup" />
+                <span class="radio-option__label">
+                  <span class="radio-option__title">📦 Retiro a coordinar</span>
+                  <span class="radio-option__desc">Retiro en punto de encuentro a convenir</span>
+                </span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="deliveryMethod" value="whatsapp" />
+                <span class="radio-option__label">
+                  <span class="radio-option__title">💬 Coordinar por WhatsApp</span>
+                  <span class="radio-option__desc">Te contactamos para definir la entrega</span>
+                </span>
+              </label>
+            </div>
+          </section>
+
+          <!-- Pago -->
+          <section class="checkout-section">
+            <h2 class="checkout-section__title">Método de pago</h2>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" formControlName="paymentMethod" value="mercado_pago" />
+                <span class="radio-option__label">
+                  <span class="radio-option__title">💳 Mercado Pago</span>
+                  <span class="radio-option__desc">Tarjeta, débito o dinero en cuenta</span>
+                </span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" formControlName="paymentMethod" value="transfer" />
+                <span class="radio-option__label">
+                  <span class="radio-option__title">🏦 Transferencia bancaria</span>
+                  <span class="radio-option__desc">Coordinamos los datos de la transferencia</span>
+                </span>
+              </label>
+            </div>
+          </section>
+
+          <!-- Observaciones -->
+          <section class="checkout-section">
+            <h2 class="checkout-section__title">Observaciones</h2>
+            <textarea class="form-input form-textarea" formControlName="notes"
+              placeholder="Alguna indicación especial para tu pedido (opcional)..."></textarea>
+          </section>
+
+          <button type="submit" class="btn btn--primary btn--lg checkout-submit"
+            [disabled]="submitting()">
+            @if (submitting()) {
+              <span class="checkout-submit__loading">Procesando pedido...</span>
+            } @else {
+              Confirmar pedido →
+            }
+          </button>
+        </form>
+
+        <!-- RESUMEN -->
+        <aside class="checkout-summary">
+          <div class="checkout-summary__card">
+            <h3 class="checkout-summary__title">Tu pedido</h3>
+
+            <div class="checkout-summary__items">
+              @for (item of cartStore_.items(); track item.product.id) {
+                <div class="checkout-summary__item">
+                  <img [src]="item.product.imageUrl" [alt]="item.product.name" />
+                  <div>
+                    <p>{{ item.product.name }}</p>
+                    <span>x{{ item.quantity }}</span>
+                  </div>
+                  <span>{{ item.subtotal | currencyAr }}</span>
+                </div>
+              }
+            </div>
+
+            <div class="checkout-summary__total">
+              <span>Total</span>
+              <span>{{ cartStore_.total() | currencyAr }}</span>
+            </div>
+
+            <a class="checkout-summary__edit" routerLink="/carrito">← Editar carrito</a>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div>
+}

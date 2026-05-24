@@ -1,0 +1,160 @@
+.confirmation-page {
+  padding: 4rem 0;
+  background: #faf6f2;
+  min-height: 70vh;
+}
+
+.confirmation-card {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid #e8e0d8;
+  border-radius: 16px;
+  padding: 3rem 2.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+
+  &__icon {
+    font-size: 4rem;
+  }
+
+  &__title {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #2c1810;
+    margin: 0;
+  }
+
+  &__subtitle {
+    color: #7a6050;
+    font-size: 0.95rem;
+    line-height: 1.65;
+    max-width: 440px;
+    margin: 0;
+  }
+
+  &__order-number {
+    background: #faf6f2;
+    border: 1px solid #e8e0d8;
+    border-radius: 10px;
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+    color: #5c4033;
+
+    strong {
+      color: #8b4513;
+      font-size: 1.1rem;
+    }
+  }
+
+  &__details {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: left;
+    background: #faf6f2;
+    border-radius: 10px;
+    padding: 1.25rem;
+  }
+
+  &__next-steps {
+    text-align: left;
+    width: 100%;
+    background: #f0f9f0;
+    border-radius: 10px;
+    padding: 1.25rem 1.5rem;
+
+    h3 {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #2d6a2d;
+      margin-bottom: 0.75rem;
+    }
+
+    ul {
+      padding-left: 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+
+      li {
+        font-size: 0.875rem;
+        color: #3d6a3d;
+        line-height: 1.5;
+      }
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+.confirmation-detail {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  &__label {
+    font-size: 0.8rem;
+    color: #a08070;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    flex-shrink: 0;
+  }
+
+  &__value {
+    font-size: 0.9rem;
+    color: #2c1810;
+    font-weight: 500;
+    text-align: right;
+
+    &--price {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #8b4513;
+    }
+  }
+
+  &__badge {
+    background: #d1fae5;
+    color: #065f46;
+    padding: 0.2rem 0.7rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+}
+
+.not-found {
+  text-align: center;
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (max-width: 480px) {
+  .confirmation-card {
+    padding: 2rem 1.25rem;
+  }
+
+  .confirmation-card__actions {
+    flex-direction: column;
+
+    .btn {
+      width: 100%;
+    }
+  }
+}

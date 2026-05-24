@@ -1,0 +1,298 @@
+// ============================================================
+// CAPILAR SHOPPING — Global Styles
+// ============================================================
+
+// Reset
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+// Root
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  color: #2c1810;
+  background: #fdfaf7;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+// Typography
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+// Links
+a {
+  color: inherit;
+}
+
+// Images
+img {
+  max-width: 100%;
+  display: block;
+}
+
+// Inputs
+input, textarea, select, button {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+// ============================================================
+// LAYOUT UTILITIES
+// ============================================================
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.section {
+  padding: 4rem 0;
+}
+
+.section__title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #2c1810;
+  margin-bottom: 2rem;
+}
+
+.section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.section__link {
+  font-size: 0.875rem;
+  color: #8b4513;
+  text-decoration: none;
+  font-weight: 600;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// ============================================================
+// PRODUCT GRID
+// ============================================================
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ============================================================
+// BUTTONS
+// ============================================================
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  border: 2px solid transparent;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+  line-height: 1;
+  white-space: nowrap;
+
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  // Sizes
+  &--lg {
+    padding: 0.875rem 1.75rem;
+    font-size: 1rem;
+    border-radius: 10px;
+  }
+
+  &--sm {
+    padding: 0.4rem 0.875rem;
+    font-size: 0.8rem;
+    border-radius: 6px;
+  }
+
+  &--xs {
+    padding: 0.3rem 0.625rem;
+    font-size: 0.75rem;
+    border-radius: 5px;
+  }
+
+  // Variants
+  &--primary {
+    background: #8b4513;
+    color: #fff;
+    border-color: #8b4513;
+
+    &:hover:not(:disabled) {
+      background: #7a3b10;
+      border-color: #7a3b10;
+    }
+  }
+
+  &--outline {
+    background: transparent;
+    color: #8b4513;
+    border-color: #8b4513;
+
+    &:hover:not(:disabled) {
+      background: #f5ede6;
+    }
+  }
+
+  &--light {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.6);
+
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #fff;
+    }
+  }
+
+  &--success {
+    background: #16a34a;
+    border-color: #16a34a;
+    color: #fff;
+  }
+
+  &--whatsapp {
+    background: #25d366;
+    color: #fff;
+    border-color: #25d366;
+
+    &:hover:not(:disabled) {
+      background: #1ebe5d;
+      border-color: #1ebe5d;
+    }
+  }
+}
+
+// ============================================================
+// ADMIN SHARED
+// ============================================================
+
+.admin-page {
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #2c1810;
+    margin-bottom: 1.5rem;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.admin-table-wrap {
+  background: #fff;
+  border: 1px solid #e8e0d8;
+  border-radius: 12px;
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+
+  th {
+    background: #faf6f2;
+    padding: 0.75rem 1rem;
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #5c4033;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid #e8e0d8;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 0.875rem 1rem;
+    border-bottom: 1px solid #f0e8e0;
+    color: #2c1810;
+    vertical-align: middle;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tr:hover td {
+    background: #fdf9f6;
+  }
+}
+
+// ORDER STATUS BADGES
+.order-status {
+  display: inline-block;
+  padding: 0.25rem 0.625rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+
+  &--created      { background: #f3f4f6; color: #111827; }
+  &--pending_payment { background: #fef3c7; color: #78350f; }
+  &--paid         { background: #d1fae5; color: #065f46; }
+  &--preparing    { background: #dbeafe; color: #1e40af; }
+  &--shipped      { background: #e0e7ff; color: #3730a3; }
+  &--delivered    { background: #d1fae5; color: #065f46; }
+  &--cancelled    { background: #fee2e2; color: #991b1b; }
+}
+
+// ============================================================
+// SCROLLBAR
+// ============================================================
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track { background: #f5ede6; }
+::-webkit-scrollbar-thumb { background: #c4956a; border-radius: 3px; }

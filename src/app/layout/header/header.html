@@ -1,0 +1,38 @@
+<header class="header">
+  <div class="header__container">
+    <a class="header__brand" routerLink="/" (click)="closeMenu()">
+      <span class="header__brand-icon">✂</span>
+      <span class="header__brand-name">Capilar <strong>Shopping</strong></span>
+    </a>
+
+    <nav class="header__nav" [class.header__nav--open]="menuOpen">
+      <a class="header__nav-link" routerLink="/" routerLinkActive="header__nav-link--active"
+        [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">Inicio</a>
+      <a class="header__nav-link" routerLink="/productos" routerLinkActive="header__nav-link--active"
+        (click)="closeMenu()">Productos</a>
+      <a class="header__nav-link" [routerLink]="['/productos']" [queryParams]="{ tipo: 'salon' }"
+        routerLinkActive="header__nav-link--active" (click)="closeMenu()">Peluquerías</a>
+      <a class="header__nav-link" [routerLink]="['/productos']" [queryParams]="{ tipo: 'wholesale' }"
+        routerLinkActive="header__nav-link--active" (click)="closeMenu()">Mayorista</a>
+    </nav>
+
+    <div class="header__actions">
+      <a class="header__cart" routerLink="/carrito" (click)="closeMenu()">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="9" cy="21" r="1" />
+          <circle cx="20" cy="21" r="1" />
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+        </svg>
+        @if (totalItems() > 0) {
+          <span class="header__cart-badge">{{ totalItems() }}</span>
+        }
+      </a>
+
+      <button class="header__burger" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen" aria-label="Menú">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+</header>

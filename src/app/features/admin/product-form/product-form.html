@@ -1,0 +1,94 @@
+<div class="admin-page">
+  <div class="admin-page__header">
+    <h1 class="admin-page__title">{{ isEdit() ? 'Editar producto' : 'Nuevo producto' }}</h1>
+    <a class="btn btn--outline" routerLink="/admin/productos">← Volver</a>
+  </div>
+
+  @if (saved()) {
+    <div class="alert alert--success">✅ Producto guardado correctamente. Redirigiendo...</div>
+  }
+
+  <form class="product-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-card">
+      <h3 class="form-card__title">Información básica</h3>
+
+      <div class="form-grid">
+        <div class="form-field form-field--full">
+          <label class="form-label">Nombre *</label>
+          <input class="form-input" formControlName="name" placeholder="Shampoo Reparador 300ml" />
+          @if (isFieldInvalid('name')) { <span class="form-error">Nombre requerido</span> }
+        </div>
+
+        <div class="form-field form-field--full">
+          <label class="form-label">Slug (URL) *</label>
+          <input class="form-input" formControlName="slug" placeholder="shampoo-reparador-300ml" />
+          @if (isFieldInvalid('slug')) { <span class="form-error">Slug requerido</span> }
+        </div>
+
+        <div class="form-field form-field--full">
+          <label class="form-label">Descripción *</label>
+          <textarea class="form-input form-textarea" formControlName="description" placeholder="Descripción del producto..."></textarea>
+          @if (isFieldInvalid('description')) { <span class="form-error">Descripción requerida</span> }
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Precio *</label>
+          <input class="form-input" type="number" formControlName="price" placeholder="2800" min="0" />
+          @if (isFieldInvalid('price')) { <span class="form-error">Precio requerido</span> }
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Stock *</label>
+          <input class="form-input" type="number" formControlName="stock" placeholder="50" min="0" />
+          @if (isFieldInvalid('stock')) { <span class="form-error">Stock requerido</span> }
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Categoría *</label>
+          <select class="form-input form-select" formControlName="categoryId">
+            <option value="">Seleccioná una categoría</option>
+            @for (cat of categories(); track cat.id) {
+              <option [value]="cat.id">{{ cat.name }}</option>
+            }
+          </select>
+          @if (isFieldInvalid('categoryId')) { <span class="form-error">Categoría requerida</span> }
+        </div>
+
+        <div class="form-field">
+          <label class="form-label">Tipo de venta *</label>
+          <select class="form-input form-select" formControlName="saleType">
+            <option value="retail">Particular</option>
+            <option value="salon">Peluquería</option>
+            <option value="wholesale">Mayorista</option>
+          </select>
+        </div>
+
+        <div class="form-field form-field--full">
+          <label class="form-label">URL de imagen</label>
+          <input class="form-input" formControlName="imageUrl" placeholder="https://..." />
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h3 class="form-card__title">Visibilidad</h3>
+      <div class="checkbox-group">
+        <label class="checkbox-option">
+          <input type="checkbox" formControlName="isActive" />
+          <span>Producto activo (visible en el catálogo)</span>
+        </label>
+        <label class="checkbox-option">
+          <input type="checkbox" formControlName="featured" />
+          <span>Destacar en el inicio</span>
+        </label>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <a class="btn btn--outline" routerLink="/admin/productos">Cancelar</a>
+      <button class="btn btn--primary" type="submit">
+        {{ isEdit() ? 'Guardar cambios' : 'Crear producto' }}
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,89 @@
+<div class="cart-page">
+  <div class="container">
+    <div class="cart-page__header">
+      <h1 class="cart-page__title">Tu carrito</h1>
+      @if (cartStore.totalItems() > 0) {
+        <span class="cart-page__count">{{ cartStore.totalItems() }} {{ cartStore.totalItems() === 1 ? 'producto' : 'productos' }}</span>
+      }
+    </div>
+
+    @if (cartStore.items().length === 0) {
+      <div class="cart-empty">
+        <span class="cart-empty__icon">🛒</span>
+        <h2>Tu carrito está vacío</h2>
+        <p>Agregá productos desde el catálogo para comenzar tu compra</p>
+        <a class="btn btn--primary btn--lg" routerLink="/productos">Ver productos</a>
+      </div>
+    } @else {
+      <div class="cart-layout">
+        <!-- Items -->
+        <div class="cart-items">
+          @for (item of cartStore.items(); track item.product.id) {
+            <div class="cart-item">
+              <a class="cart-item__image-wrap" [routerLink]="['/productos', item.product.slug]">
+                <img class="cart-item__image" [src]="item.product.imageUrl" [alt]="item.product.name" />
+              </a>
+
+              <div class="cart-item__info">
+                <a class="cart-item__name" [routerLink]="['/productos', item.product.slug]">
+                  {{ item.product.name }}
+                </a>
+                <p class="cart-item__category">{{ item.product.categoryName }}</p>
+                <p class="cart-item__unit-price">{{ item.product.price | currencyAr }} c/u</p>
+
+                <div class="cart-item__controls">
+                  <div class="quantity-selector">
+                    <button class="quantity-selector__btn" (click)="updateQuantity(item, item.quantity - 1)" [disabled]="item.quantity <= 1">−</button>
+                    <span class="quantity-selector__value">{{ item.quantity }}</span>
+                    <button class="quantity-selector__btn" (click)="updateQuantity(item, item.quantity + 1)" [disabled]="item.quantity >= item.product.stock">+</button>
+                  </div>
+
+                  <button class="cart-item__remove" (click)="removeItem(item)" aria-label="Eliminar">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="3 6 5 6 21 6" />
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                    </svg>
+                    Eliminar
+                  </button>
+                </div>
+              </div>
+
+              <div class="cart-item__subtotal">
+                {{ item.subtotal | currencyAr }}
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Summary -->
+        <aside class="cart-summary">
+          <div class="cart-summary__card">
+            <h3 class="cart-summary__title">Resumen de compra</h3>
+
+            <div class="cart-summary__lines">
+              @for (item of cartStore.items(); track item.product.id) {
+                <div class="cart-summary__line">
+                  <span>{{ item.product.name }} x{{ item.quantity }}</span>
+                  <span>{{ item.subtotal | currencyAr }}</span>
+                </div>
+              }
+            </div>
+
+            <div class="cart-summary__total">
+              <span>Total</span>
+              <span>{{ cartStore.total() | currencyAr }}</span>
+            </div>
+
+            <a class="btn btn--primary btn--lg cart-summary__checkout-btn" routerLink="/checkout">
+              Continuar con el pago
+            </a>
+
+            <a class="btn btn--outline cart-summary__continue-btn" routerLink="/productos">
+              ← Seguir comprando
+            </a>
+          </div>
+        </aside>
+      </div>
+    }
+  </div>
+</div>

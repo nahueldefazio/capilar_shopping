@@ -1,0 +1,262 @@
+.product-detail {
+  padding-bottom: 4rem;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-top: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  &__gallery {
+    position: sticky;
+    top: 80px;
+    align-self: start;
+  }
+
+  &__image-wrap {
+    position: relative;
+    background: #f5ede6;
+    border-radius: 16px;
+    overflow: hidden;
+    aspect-ratio: 1;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  &__featured-tag {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: #8b4513;
+    color: #fff;
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 0.3rem 0.75rem;
+    border-radius: 6px;
+    text-transform: uppercase;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  &__category {
+    font-size: 0.8rem;
+    color: #a08070;
+  }
+
+  &__name {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #2c1810;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  &__price {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #8b4513;
+    margin: 0;
+  }
+
+  &__description {
+    font-size: 0.975rem;
+    color: #5c4033;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  &__stock {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #2d6a2d;
+    font-weight: 500;
+
+    &--low {
+      color: #d97706;
+    }
+
+    &--out {
+      color: #b91c1c;
+    }
+  }
+
+  &__quantity {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    &-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #5c4033;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  &__add-btn {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  &__shipping-info {
+    background: #faf6f2;
+    border-radius: 10px;
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-top: 0.25rem;
+  }
+}
+
+.shipping-info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.85rem;
+  color: #5c4033;
+}
+
+.quantity-selector {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid #e0d4c8;
+  border-radius: 8px;
+  overflow: hidden;
+  width: fit-content;
+
+  &__btn {
+    width: 40px;
+    height: 40px;
+    background: #f5ede6;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #5c4033;
+    transition: background 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover:not(:disabled) {
+      background: #e8d5c4;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  &__value {
+    width: 48px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c1810;
+    border-left: 1px solid #e0d4c8;
+    border-right: 1px solid #e0d4c8;
+    padding: 0 0.5rem;
+    line-height: 40px;
+  }
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #a08070;
+  padding: 1.5rem 0 0;
+
+  a {
+    color: #8b4513;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  span {
+    color: #c8b8a8;
+  }
+}
+
+.not-found {
+  text-align: center;
+  padding: 6rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  &__icon {
+    font-size: 4rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    color: #2c1810;
+  }
+
+  p {
+    color: #7a6050;
+  }
+}
+
+.related-products {
+  background: #faf6f2;
+  padding-top: 2rem;
+  padding-bottom: 3rem;
+}
+
+@media (max-width: 768px) {
+  .product-detail {
+    &__grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+
+    &__gallery {
+      position: static;
+    }
+
+    &__name {
+      font-size: 1.4rem;
+    }
+
+    &__price {
+      font-size: 1.6rem;
+    }
+
+    &__add-btn {
+      flex: unset;
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,45 @@
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
+import { ProductService } from '../../../core/services/product.service';
+import { OrderService } from '../../../core/services/order.service';
+import { CurrencyArPipe } from '../../../shared/pipes/currency-ar.pipe';
+
+@Component({
+  selector: 'app-admin-dashboard',
+  standalone: true,
+  imports: [RouterLink, CurrencyArPipe, DatePipe],
+  templateUrl: './dashboard.html',
+  styleUrl: './dashboard.scss',
+})
+export class AdminDashboardComponent implements OnInit {
+  private productService = inject(ProductService);
+  private orderService = inject(OrderService);
+
+  stats = signal({
+    totalProducts: 0,
+    activeProducts: 0,
+    totalOrders: 0,
+    todayOrders: 0,
+    todaySales: 0,
+    pendingOrders: 0,
+  });
+
+  recentOrders = signal(this.orderService.getOrders().slice(0, 5));
+
+  ngOnInit(): void {
+    const products = this.productService.getAllProductsAdmin();
+    const orders = this.orderService.getOrders();
+    const today = new Date().toDateString();
+    const todayOrders = orders.filter((o) => new Date(o.createdAt).toDateString() === today);
+
+    this.stats.set({
+      totalProducts: products.length,
+      activeProducts: products.filter((p) => p.isActive).length,
+      totalOrders: orders.length,
+      todayOrders: todayOrders.length,
+      todaySales: todayOrders.reduce((acc, o) => acc + o.total, 0),
+      pendingOrders: orders.filter((o) => ['created', 'pending_payment'].includes(o.status)).length,
+    });
+  }
+}

@@ -1,0 +1,49 @@
+.product-thumb {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #f5ede6;
+}
+
+.table-row--inactive {
+  opacity: 0.6;
+}
+
+.sale-type {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 600;
+
+  &--retail { background: #e8f4e8; color: #2d6a2d; }
+  &--salon { background: #e8e4f4; color: #3d2d7a; }
+  &--wholesale { background: #f4e8d4; color: #7a4a1a; }
+}
+
+.low-stock { color: #d97706; font-weight: 600; }
+.no-stock { color: #b91c1c; font-weight: 600; }
+
+.status-toggle {
+  background: none;
+  border: 1px solid #e0d4c8;
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s;
+  white-space: nowrap;
+
+  &:hover { background: #f5ede6; }
+
+  &--active {
+    border-color: #22c55e;
+    background: #f0fdf4;
+  }
+}
+
+.table-actions {
+  display: flex;
+  gap: 0.375rem;
+}

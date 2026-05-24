@@ -1,0 +1,104 @@
+<div class="products-page">
+  <div class="products-page__hero">
+    <div class="container">
+      <h1 class="products-page__title">Catálogo de productos</h1>
+      <p class="products-page__subtitle">Encontrá los mejores productos capilares para cada necesidad</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="products-layout">
+      <!-- SIDEBAR FILTROS -->
+      <aside class="filters">
+        <div class="filters__header">
+          <h3 class="filters__title">Filtros</h3>
+          <button class="filters__clear" (click)="clearFilters()">Limpiar</button>
+        </div>
+
+        <!-- Búsqueda -->
+        <div class="filters__group">
+          <label class="filters__label">Buscar</label>
+          <div class="filters__search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
+            </svg>
+            <input
+              class="filters__input"
+              type="text"
+              placeholder="Buscar producto..."
+              [value]="searchQuery()"
+              (input)="onSearch($any($event.target).value)" />
+          </div>
+        </div>
+
+        <!-- Categoría -->
+        <div class="filters__group">
+          <label class="filters__label">Categoría</label>
+          <div class="filters__options">
+            <button
+              class="filters__option"
+              [class.filters__option--active]="selectedCategory() === 'todos'"
+              (click)="selectCategory('todos')">
+              Todos
+            </button>
+            @for (cat of categories(); track cat.id) {
+              <button
+                class="filters__option"
+                [class.filters__option--active]="selectedCategory() === cat.slug"
+                (click)="selectCategory(cat.slug)">
+                {{ cat.name }}
+              </button>
+            }
+          </div>
+        </div>
+
+        <!-- Tipo de venta -->
+        <div class="filters__group">
+          <label class="filters__label">Tipo de venta</label>
+          <div class="filters__options">
+            <button class="filters__option" [class.filters__option--active]="selectedSaleType() === 'all'" (click)="selectSaleType('all')">Todos</button>
+            <button class="filters__option" [class.filters__option--active]="selectedSaleType() === 'retail'" (click)="selectSaleType('retail')">Particular</button>
+            <button class="filters__option" [class.filters__option--active]="selectedSaleType() === 'salon'" (click)="selectSaleType('salon')">Peluquería</button>
+            <button class="filters__option" [class.filters__option--active]="selectedSaleType() === 'wholesale'" (click)="selectSaleType('wholesale')">Mayorista</button>
+          </div>
+        </div>
+
+        <!-- Orden -->
+        <div class="filters__group">
+          <label class="filters__label">Ordenar por precio</label>
+          <select class="filters__select" [value]="sortBy()" (change)="onSortChange($any($event.target).value)">
+            <option value="default">Relevancia</option>
+            <option value="price-asc">Menor precio</option>
+            <option value="price-desc">Mayor precio</option>
+          </select>
+        </div>
+      </aside>
+
+      <!-- GRID PRODUCTOS -->
+      <main class="products-main">
+        <div class="products-main__bar">
+          <p class="products-main__count">
+            {{ filteredProducts().length }} {{ filteredProducts().length === 1 ? 'producto' : 'productos' }}
+          </p>
+        </div>
+
+        @if (loading()) {
+          <app-loading text="Cargando productos..." [fullPage]="true" />
+        } @else if (filteredProducts().length === 0) {
+          <div class="empty-state">
+            <span class="empty-state__icon">🔍</span>
+            <h3>No encontramos productos</h3>
+            <p>Probá con otro filtro o término de búsqueda</p>
+            <button class="btn btn--outline" (click)="clearFilters()">Limpiar filtros</button>
+          </div>
+        } @else {
+          <div class="products-grid">
+            @for (product of filteredProducts(); track product.id) {
+              <app-product-card [product]="product" (addToCart)="addToCart($event)" />
+            }
+          </div>
+        }
+      </main>
+    </div>
+  </div>
+</div>
