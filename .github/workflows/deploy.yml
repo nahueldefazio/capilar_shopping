@@ -31,7 +31,7 @@ jobs:
         run: npx ng build --configuration=production
 
       - name: List build output (debug)
-        run: ls -la dist/browser/
+        run: ls -la dist/
 
       - name: Deploy to Hostinger via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
@@ -39,7 +39,7 @@ jobs:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/browser/
+          local-dir: ./dist/
           server-dir: /public_html/
           state-name: .ftp-deploy-sync-state.json
           exclude: |
