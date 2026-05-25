@@ -8,9 +8,10 @@ export interface Product {
   price: number;
   stock: number;
   categoryId: string;
-  categoryName: string;
+  categoryName?: string;
+  categorySlug?: string;
   saleType: SaleType;
-  imageUrl: string;
+  imageUrl?: string;
   isActive: boolean;
   featured: boolean;
   createdAt: string;

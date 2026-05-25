@@ -25,15 +25,25 @@ export class AdminOrderListComponent implements OnInit {
   private orderService = inject(OrderService);
 
   orders = signal<Order[]>([]);
+  loading = signal(true);
   statusLabels = ORDER_STATUS_LABELS;
   statuses: OrderStatus[] = ['created', 'pending_payment', 'paid', 'preparing', 'shipped', 'delivered', 'cancelled'];
 
   ngOnInit(): void {
-    this.orders.set(this.orderService.getOrders());
+    this.orderService.getOrders().subscribe({
+      next: (orders) => {
+        this.orders.set(orders);
+        this.loading.set(false);
+      },
+      error: () => this.loading.set(false),
+    });
   }
 
   updateStatus(order: Order, status: string): void {
-    this.orderService.updateOrderStatus(order.id, status as OrderStatus);
-    this.orders.set(this.orderService.getOrders());
+    this.orderService.updateOrderStatus(order.id, status as OrderStatus).subscribe({
+      next: (updated) => {
+        this.orders.update((list) => list.map((o) => (o.id === updated.id ? updated : o)));
+      },
+    });
   }
 }

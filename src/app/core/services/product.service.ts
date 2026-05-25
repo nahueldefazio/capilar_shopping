@@ -1,21 +1,44 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Product, SaleType } from '../models';
-import { MOCK_PRODUCTS } from './mock-data';
+import { environment } from '../../../environments/environment';
 
-// Ready to inject HttpClient and replace mock methods with HTTP calls
 @Injectable({ providedIn: 'root' })
 export class ProductService {
-  private _products = signal<Product[]>(MOCK_PRODUCTS);
+  private http = inject(HttpClient);
+  private base = environment.apiUrl;
+
+  private _products = signal<Product[]>([]);
+  private _loading = signal(false);
+  private _loaded = false;
+
+  loading = this._loading.asReadonly();
+
+  private _ensureLoaded(): void {
+    if (this._loaded) return;
+    this._loaded = true;
+    this._loading.set(true);
+    this.http.get<Product[]>(`${this.base}/products`).subscribe({
+      next: (products) => {
+        this._products.set(products);
+        this._loading.set(false);
+      },
+      error: () => this._loading.set(false),
+    });
+  }
 
   getProducts(): Product[] {
+    this._ensureLoaded();
     return this._products().filter((p) => p.isActive);
   }
 
   getFeaturedProducts(): Product[] {
+    this._ensureLoaded();
     return this._products().filter((p) => p.isActive && p.featured);
   }
 
   getProductBySlug(slug: string): Product | undefined {
+    this._ensureLoaded();
     return this._products().find((p) => p.slug === slug && p.isActive);
   }
 
@@ -31,61 +54,42 @@ export class ProductService {
   }
 
   searchProducts(query: string, categorySlug?: string, saleType?: SaleType): Product[] {
+    this._ensureLoaded();
     const q = query.toLowerCase().trim();
     return this._products().filter((p) => {
       if (!p.isActive) return false;
       const matchesQuery = !q || p.name.toLowerCase().includes(q) || p.description.toLowerCase().includes(q);
-      const matchesCategory =
-        !categorySlug || categorySlug === 'todos' || p.categoryId === this._getCategoryIdBySlug(categorySlug);
+      const matchesCategory = !categorySlug || categorySlug === 'todos' || p.categorySlug === categorySlug;
       const matchesSaleType = !saleType || p.saleType === saleType;
       return matchesQuery && matchesCategory && matchesSaleType;
     });
   }
 
-  // Admin operations — will call HTTP PUT/POST when backend is ready
-  createProduct(product: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>): Product {
-    const newProduct: Product = {
-      ...product,
-      id: `p-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-    this._products.update((products) => [...products, newProduct]);
-    return newProduct;
-  }
-
-  updateProduct(id: string, changes: Partial<Product>): void {
-    this._products.update((products) =>
-      products.map((p) =>
-        p.id === id ? { ...p, ...changes, updatedAt: new Date().toISOString() } : p
-      )
-    );
-  }
-
-  updateStock(id: string, stock: number): void {
-    this.updateProduct(id, { stock });
-  }
-
-  toggleProductStatus(id: string): void {
-    this._products.update((products) =>
-      products.map((p) =>
-        p.id === id ? { ...p, isActive: !p.isActive, updatedAt: new Date().toISOString() } : p
-      )
-    );
-  }
-
   getAllProductsAdmin(): Product[] {
+    this._ensureLoaded();
     return this._products();
   }
 
-  private _getCategoryIdBySlug(slug: string): string {
-    const map: Record<string, string> = {
-      'cuidado-capilar': 'cat-1',
-      'tratamientos': 'cat-2',
-      'peluquerias': 'cat-3',
-      'mayorista': 'cat-4',
-      'combos': 'cat-5',
-    };
-    return map[slug] ?? '';
+  createProduct(data: Partial<Product>): void {
+    this.http.post<Product>(`${this.base}/products`, data).subscribe((p) => {
+      this._products.update((list) => [...list, p]);
+    });
+  }
+
+  updateProduct(id: string, changes: Partial<Product>): void {
+    this.http.patch<Product>(`${this.base}/products/${id}`, changes).subscribe((updated) => {
+      this._products.update((list) => list.map((p) => (p.id === updated.id ? updated : p)));
+    });
+  }
+
+  toggleProductStatus(id: string): void {
+    const product = this._products().find((p) => p.id === id);
+    if (!product) return;
+    this.updateProduct(id, { isActive: !product.isActive });
+  }
+
+  reload(): void {
+    this._loaded = false;
+    this._ensureLoaded();
   }
 }

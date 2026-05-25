@@ -21,6 +21,7 @@ export class CheckoutComponent {
 
   cartStore_ = this.cartStore;
   submitting = signal(false);
+  errorMsg = signal('');
 
   form = this.fb.group({
     fullName: ['', [Validators.required, Validators.minLength(3)]],
@@ -53,32 +54,36 @@ export class CheckoutComponent {
     if (this.cartStore.items().length === 0) return;
 
     this.submitting.set(true);
+    this.errorMsg.set('');
 
-    // Simulate async operation — replace with HTTP call
-    setTimeout(() => {
-      const v = this.form.value;
-      const order = this.orderService.createOrder(
-        {
-          customer: {
-            fullName: v.fullName!,
-            email: v.email!,
-            phone: v.phone!,
-            customerType: v.customerType as Customer['customerType'],
-            address: v.address!,
-            province: v.province!,
-            city: v.city!,
-            postalCode: v.postalCode!,
-          },
-          paymentMethod: v.paymentMethod as PaymentMethod,
-          deliveryMethod: v.deliveryMethod as DeliveryMethod,
-          notes: v.notes ?? '',
+    const v = this.form.value;
+    this.orderService.createOrder(
+      {
+        customer: {
+          fullName: v.fullName!,
+          email: v.email!,
+          phone: v.phone!,
+          customerType: v.customerType as Customer['customerType'],
+          address: v.address!,
+          province: v.province!,
+          city: v.city!,
+          postalCode: v.postalCode!,
         },
-        this.cartStore.items()
-      );
-
-      this.cartStore.clearCart();
-      this.submitting.set(false);
-      this.router.navigate(['/confirmacion', order.id]);
-    }, 1000);
+        paymentMethod: v.paymentMethod as PaymentMethod,
+        deliveryMethod: v.deliveryMethod as DeliveryMethod,
+        notes: v.notes ?? '',
+      },
+      this.cartStore.items()
+    ).subscribe({
+      next: (order) => {
+        this.cartStore.clearCart();
+        this.submitting.set(false);
+        this.router.navigate(['/confirmacion', order.id]);
+      },
+      error: () => {
+        this.submitting.set(false);
+        this.errorMsg.set('Hubo un error al procesar tu pedido. Intentá de nuevo.');
+      },
+    });
   }
 }

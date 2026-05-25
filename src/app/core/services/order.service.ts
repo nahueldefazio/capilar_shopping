@@ -1,5 +1,9 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { CartItem, Customer, Order, OrderStatus, PaymentMethod, DeliveryMethod } from '../models';
+import { environment } from '../../../environments/environment';
 
 export interface CheckoutData {
   customer: Customer;
@@ -8,111 +12,47 @@ export interface CheckoutData {
   notes: string;
 }
 
-// Mock orders for admin panel
-const MOCK_ORDERS: Order[] = [
-  {
-    id: 'o-1',
-    orderNumber: 'CAP-001',
-    customer: {
-      fullName: 'María González',
-      email: 'maria@email.com',
-      phone: '1123456789',
-      customerType: 'retail',
-      address: 'Av. Corrientes 1234',
-      province: 'Buenos Aires',
-      city: 'CABA',
-      postalCode: '1043',
-    },
-    items: [],
-    total: 8600,
-    status: 'paid',
-    paymentMethod: 'mercado_pago',
-    deliveryMethod: 'home_delivery',
-    notes: '',
-    createdAt: new Date(Date.now() - 86400000 * 2).toISOString(),
-  },
-  {
-    id: 'o-2',
-    orderNumber: 'CAP-002',
-    customer: {
-      fullName: 'Peluquería El Rizo',
-      email: 'elrizo@email.com',
-      phone: '1198765432',
-      customerType: 'salon',
-      address: 'Av. Santa Fe 4567',
-      province: 'Buenos Aires',
-      city: 'CABA',
-      postalCode: '1425',
-    },
-    items: [],
-    total: 36000,
-    status: 'preparing',
-    paymentMethod: 'transfer',
-    deliveryMethod: 'pickup',
-    notes: 'Coordinar retiro el jueves',
-    createdAt: new Date(Date.now() - 86400000).toISOString(),
-  },
-  {
-    id: 'o-3',
-    orderNumber: 'CAP-003',
-    customer: {
-      fullName: 'Distribuidora Capilar Sur',
-      email: 'sur@distribuidora.com',
-      phone: '1167891234',
-      customerType: 'wholesale',
-      address: 'Av. Rivadavia 8900',
-      province: 'Buenos Aires',
-      city: 'Lanús',
-      postalCode: '1824',
-    },
-    items: [],
-    total: 68000,
-    status: 'pending_payment',
-    paymentMethod: 'transfer',
-    deliveryMethod: 'whatsapp',
-    notes: '',
-    createdAt: new Date().toISOString(),
-  },
-];
+interface CheckoutPayload {
+  customer: Customer;
+  items: { productId: string; quantity: number }[];
+  paymentMethod: PaymentMethod;
+  deliveryMethod: DeliveryMethod;
+  notes: string;
+}
 
 @Injectable({ providedIn: 'root' })
 export class OrderService {
-  private _orders = signal<Order[]>(MOCK_ORDERS);
-  private _orderCounter = signal(MOCK_ORDERS.length + 1);
+  private http = inject(HttpClient);
+  private base = environment.apiUrl;
 
-  // Replace with HTTP POST when backend is ready
-  createOrder(data: CheckoutData, items: CartItem[]): Order {
-    const number = String(this._orderCounter()).padStart(3, '0');
-    const order: Order = {
-      id: `o-${Date.now()}`,
-      orderNumber: `CAP-${number}`,
+  private _orders = signal<Order[]>([]);
+
+  createOrder(data: CheckoutData, items: CartItem[]): Observable<Order> {
+    const payload: CheckoutPayload = {
       customer: data.customer,
-      items: [...items],
-      total: items.reduce((acc, i) => acc + i.subtotal, 0),
-      status: 'created',
+      items: items.map((i) => ({ productId: i.product.id, quantity: i.quantity })),
       paymentMethod: data.paymentMethod,
       deliveryMethod: data.deliveryMethod,
       notes: data.notes,
-      createdAt: new Date().toISOString(),
     };
-    this._orders.update((orders) => [order, ...orders]);
-    this._orderCounter.update((n) => n + 1);
-    return order;
+    return this.http.post<Order>(`${this.base}/checkout/create-order`, payload).pipe(
+      tap((order) => this._orders.update((list) => [order, ...list]))
+    );
   }
 
-  // Replace with HTTP GET when backend is ready
-  getOrders(): Order[] {
-    return this._orders();
+  getOrders(): Observable<Order[]> {
+    return this.http.get<Order[]>(`${this.base}/orders`).pipe(
+      tap((orders) => this._orders.set(orders))
+    );
   }
 
-  getOrderById(id: string): Order | undefined {
-    return this._orders().find((o) => o.id === id);
+  getOrderById(id: string): Observable<Order> {
+    return this.http.get<Order>(`${this.base}/orders/${id}`);
   }
 
-  // Replace with HTTP PATCH when backend is ready
-  updateOrderStatus(id: string, status: OrderStatus): void {
-    this._orders.update((orders) =>
-      orders.map((o) => (o.id === id ? { ...o, status } : o))
+  updateOrderStatus(id: string, status: OrderStatus): Observable<Order> {
+    return this.http.patch<Order>(`${this.base}/orders/${id}/status`, { status }).pipe(
+      tap((updated) => this._orders.update((list) => list.map((o) => (o.id === updated.id ? updated : o))))
     );
   }
 }
