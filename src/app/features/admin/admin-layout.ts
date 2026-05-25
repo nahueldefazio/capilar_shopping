@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-admin-layout',
@@ -18,6 +19,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
           <a routerLink="/admin/pedidos" routerLinkActive="active">🛒 Pedidos</a>
         </nav>
         <a class="admin-sidebar__back" routerLink="/">← Volver al sitio</a>
+        <button class="admin-sidebar__logout" (click)="auth.logout()">Cerrar sesión</button>
       </aside>
       <main class="admin-content">
         <router-outlet />
@@ -65,6 +67,21 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 
         &:hover { color: #e8d5c4; }
       }
+
+      &__logout {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.8rem;
+        color: #a08070;
+        background: none;
+        border: none;
+        border-top: 1px solid #3d2418;
+        cursor: pointer;
+        text-align: left;
+        width: 100%;
+        transition: color 0.15s;
+
+        &:hover { color: #e8d5c4; }
+      }
     }
 
     .admin-nav {
@@ -108,4 +125,6 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
     }
   `],
 })
-export class AdminLayoutComponent {}
+export class AdminLayoutComponent {
+  auth = inject(AuthService);
+}

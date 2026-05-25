@@ -1,0 +1,40 @@
+<div class="login-page">
+  <div class="login-card">
+    <div class="login-card__logo">
+      <h1>Capilar Shopping</h1>
+      <p>Panel de administración</p>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form">
+      @if (error()) {
+        <div class="login-form__error">{{ error() }}</div>
+      }
+
+      <div class="login-form__field">
+        <label for="username">Usuario</label>
+        <input
+          id="username"
+          type="text"
+          formControlName="username"
+          placeholder="Usuario"
+          autocomplete="username"
+        />
+      </div>
+
+      <div class="login-form__field">
+        <label for="password">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          placeholder="Contraseña"
+          autocomplete="current-password"
+        />
+      </div>
+
+      <button type="submit" class="btn btn--primary btn--lg" style="width:100%" [disabled]="loading()">
+        {{ loading() ? 'Ingresando...' : 'Ingresar' }}
+      </button>
+    </form>
+  </div>
+</div>
