@@ -3,6 +3,7 @@ import { OrderService } from '../../../core/services/order.service';
 import { Order, OrderStatus } from '../../../core/models';
 import { CurrencyArPipe } from '../../../shared/pipes/currency-ar.pipe';
 import { DatePipe } from '@angular/common';
+import { LoadingComponent } from '../../../shared/components/loading/loading';
 
 const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   created: 'Creado',
@@ -17,7 +18,7 @@ const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
 @Component({
   selector: 'app-admin-order-list',
   standalone: true,
-  imports: [CurrencyArPipe, DatePipe],
+  imports: [CurrencyArPipe, DatePipe, LoadingComponent],
   templateUrl: './order-list.html',
   styleUrl: './order-list.scss',
 })

@@ -1,15 +1,16 @@
-import { Component, inject, OnInit, signal, effect } from '@angular/core';
+import { Component, inject, OnInit, signal, effect, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ProductService } from '../../../core/services/product.service';
 import { OrderService } from '../../../core/services/order.service';
 import { Order } from '../../../core/models';
 import { CurrencyArPipe } from '../../../shared/pipes/currency-ar.pipe';
+import { LoadingComponent } from '../../../shared/components/loading/loading';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [RouterLink, CurrencyArPipe, DatePipe],
+  imports: [RouterLink, CurrencyArPipe, DatePipe, LoadingComponent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
@@ -27,6 +28,7 @@ export class AdminDashboardComponent implements OnInit {
   });
 
   recentOrders = signal<Order[]>([]);
+  loading = signal(true);
 
   constructor() {
     effect(() => {
@@ -43,6 +45,7 @@ export class AdminDashboardComponent implements OnInit {
     this.productService.load();
 
     this.orderService.getOrders().subscribe((orders) => {
+      this.loading.set(false);
       const today = new Date().toDateString();
       const todayOrders = orders.filter((o) => new Date(o.createdAt).toDateString() === today);
 

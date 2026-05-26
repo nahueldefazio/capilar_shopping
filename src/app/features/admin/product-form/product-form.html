@@ -89,8 +89,12 @@
 
     <div class="form-actions">
       <a class="btn btn--outline" routerLink="/admin/productos">Cancelar</a>
-      <button class="btn btn--primary" type="submit">
-        {{ isEdit() ? 'Guardar cambios' : 'Crear producto' }}
+      <button class="btn btn--primary" type="submit" [disabled]="saving()">
+        @if (saving()) {
+          <app-loading [inline]="true" />
+        } @else {
+          {{ isEdit() ? 'Guardar cambios' : 'Crear producto' }}
+        }
       </button>
     </div>
   </form>

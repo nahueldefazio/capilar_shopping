@@ -1,6 +1,10 @@
 <div class="admin-page">
   <h1 class="admin-page__title">Dashboard</h1>
 
+  @if (loading()) {
+    <app-loading text="Cargando datos..." />
+  } @else {
+
   <div class="stats-grid">
     <div class="stat-card">
       <span class="stat-card__icon">📦</span>
@@ -88,4 +92,6 @@
       <span>Crear un producto nuevo</span>
     </a>
   </div>
+
+  } <!-- end @else -->
 </div>

@@ -5,11 +5,12 @@ import { ProductService } from '../../../core/services/product.service';
 import { CategoryService } from '../../../core/services/category.service';
 import { Category, SaleType } from '../../../core/models';
 import { ImageUploadComponent } from '../../../shared/components/image-upload/image-upload';
+import { LoadingComponent } from '../../../shared/components/loading/loading';
 
 @Component({
   selector: 'app-admin-product-form',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink, ImageUploadComponent],
+  imports: [ReactiveFormsModule, RouterLink, ImageUploadComponent, LoadingComponent],
   templateUrl: './product-form.html',
   styleUrl: './product-form.scss',
 })
@@ -24,6 +25,7 @@ export class AdminProductFormComponent implements OnInit {
   isEdit = signal(false);
   productId = signal<string | null>(null);
   saved = signal(false);
+  saving = signal(false);
 
   form = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
@@ -110,6 +112,7 @@ export class AdminProductFormComponent implements OnInit {
       });
     }
 
+    this.saving.set(true);
     this.saved.set(true);
     setTimeout(() => this.router.navigate(['/admin/productos']), 1500);
   }
