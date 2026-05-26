@@ -1,3 +1,5 @@
+:host { display: block; }
+
 .products-page {
   &__hero {
     background: linear-gradient(135deg, #1A1010, #3A1E18);
@@ -165,6 +167,14 @@
     font-size: 0.875rem;
     color: var(--clr-ink-soft);
     font-weight: 500;
+  }
+
+  // sidebar ocupa 260px + gap, así que 3 cols es el máximo razonable
+  .products-grid {
+    grid-template-columns: repeat(3, 1fr);
+
+    @media (max-width: 900px) { grid-template-columns: repeat(2, 1fr); }
+    @media (max-width: 480px) { grid-template-columns: 1fr; }
   }
 }
 
