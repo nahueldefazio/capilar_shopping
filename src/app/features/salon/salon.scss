@@ -204,5 +204,13 @@
 
 @media (max-width: 640px) {
   .salon-hero { padding: 4rem 1.25rem; }
-  .salon-hero__actions { flex-direction: column; .btn { width: 100%; } }
+  .salon-hero__actions { flex-direction: column; .btn { width: 100%; justify-content: center; } }
+}
+
+@media (max-width: 480px) {
+  .salon-hero {
+    padding: 2.75rem 1.25rem;
+    &__title { font-size: clamp(1.6rem, 6vw, 2.2rem); }
+    &__subtitle { font-size: 0.9rem; }
+  }
 }

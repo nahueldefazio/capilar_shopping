@@ -237,26 +237,22 @@
 
 @media (max-width: 768px) {
   .product-detail {
-    &__grid {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-
-    &__gallery {
-      position: static;
-    }
-
-    &__name {
-      font-size: 1.4rem;
-    }
-
-    &__price {
-      font-size: 1.6rem;
-    }
-
-    &__add-btn {
-      flex: unset;
-      width: 100%;
-    }
+    &__grid    { grid-template-columns: 1fr; gap: 1.5rem; }
+    &__gallery { position: static; }
+    &__name    { font-size: 1.4rem; }
+    &__price   { font-size: 1.6rem; }
+    &__add-btn { flex: unset; width: 100%; }
   }
+}
+
+@media (max-width: 480px) {
+  .product-detail {
+    &__actions { flex-direction: column; }
+    &__add-btn { min-width: unset; }
+    &__name    { font-size: 1.25rem; }
+    &__price   { font-size: 1.4rem; }
+    &__shipping-info { padding: 0.875rem 1rem; }
+  }
+
+  .breadcrumb { padding-top: 1rem; font-size: 0.75rem; }
 }

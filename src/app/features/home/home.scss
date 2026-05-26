@@ -427,9 +427,31 @@
 
 @media (max-width: 480px) {
   .categories__grid { grid-template-columns: 1fr 1fr; }
+  .benefits__grid   { grid-template-columns: 1fr; }
 
   .hero__actions {
     flex-direction: column;
-    .btn { width: 100%; text-align: center; }
+    .btn { width: 100%; text-align: center; justify-content: center; }
   }
+
+  .promo-banner {
+    padding: 1.5rem;
+    &__title { font-size: 1.3rem; }
+    &__actions { flex-direction: column; .btn { width: 100%; justify-content: center; } }
+  }
+
+  .cta-whatsapp__card {
+    padding: 1.5rem;
+    h2 { font-size: 1.2rem; }
+  }
+
+  .trust-bar__items {
+    gap: 0.75rem;
+    padding: 0 1.25rem;
+  }
+
+  .trust-bar__item { font-size: 0.75rem; }
+
+  .combos-grid { gap: 0.875rem; }
+  .combo-card { padding: 1.25rem; gap: 1rem; }
 }
