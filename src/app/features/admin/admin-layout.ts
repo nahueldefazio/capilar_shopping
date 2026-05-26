@@ -117,11 +117,27 @@ import { AuthService } from '../../core/services/auth.service';
         width: 100%;
         height: auto;
         position: static;
+        padding: 0.75rem 0;
 
-        &__back { display: none; }
+        &__brand { padding: 0.5rem 1rem 0.75rem; font-size: 0.875rem; }
+        &__back  { display: none; }
+        &__logout { padding: 0.5rem 1rem; }
       }
 
-      .admin-nav { flex-direction: row; flex-wrap: wrap; }
+      .admin-nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 0.5rem;
+        gap: 0.375rem;
+
+        a { font-size: 0.8rem; padding: 0.5rem 0.625rem; }
+      }
+
+      .admin-content { padding: 1rem; }
+    }
+
+    @media (max-width: 480px) {
+      .admin-content { padding: 0.875rem 0.75rem; }
     }
   `],
 })

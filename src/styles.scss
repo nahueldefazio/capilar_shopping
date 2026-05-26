@@ -231,6 +231,8 @@ input, textarea, select, button { font-family: inherit; font-size: inherit; }
     color: var(--clr-ink);
     margin-bottom: 0;
     letter-spacing: 0.01em;
+
+    @media (max-width: 480px) { font-size: 1.3rem; }
   }
 
   &__header {
@@ -238,6 +240,22 @@ input, textarea, select, button { font-family: inherit; font-size: inherit; }
     align-items: center;
     justify-content: space-between;
     margin-bottom: 1.5rem;
+
+    @media (max-width: 480px) {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-table {
+    font-size: 0.78rem;
+
+    th { padding: 0.5rem 0.625rem; font-size: 0.65rem; }
+    td { padding: 0.625rem 0.625rem; }
   }
 }
 
