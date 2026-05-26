@@ -1,4 +1,8 @@
-@if (order()) {
+@if (loading()) {
+  <div class="container" style="padding: 4rem 0; text-align: center;">
+    <app-loading text="Cargando pedido..." />
+  </div>
+} @else if (order()) {
   <div class="confirmation-page">
     <div class="container">
       <div class="confirmation-card">

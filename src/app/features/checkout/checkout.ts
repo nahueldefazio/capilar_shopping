@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ElementRef } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { CartStore } from '../../core/services/cart.store';
@@ -18,6 +18,7 @@ export class CheckoutComponent {
   private cartStore = inject(CartStore);
   private orderService = inject(OrderService);
   private router = inject(Router);
+  private el = inject(ElementRef);
 
   cartStore_ = this.cartStore;
   submitting = signal(false);
@@ -49,6 +50,11 @@ export class CheckoutComponent {
   onSubmit(): void {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      setTimeout(() => {
+        const first = this.el.nativeElement.querySelector('.form-input.ng-invalid, .ng-invalid .form-input');
+        first?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        first?.focus();
+      });
       return;
     }
     if (this.cartStore.items().length === 0) return;
@@ -76,9 +82,10 @@ export class CheckoutComponent {
       this.cartStore.items()
     ).subscribe({
       next: (order) => {
-        this.cartStore.clearCart();
         this.submitting.set(false);
-        this.router.navigate(['/confirmacion', order.id]);
+        this.router.navigate(['/confirmacion', order.id], { state: { order } }).then(() => {
+          this.cartStore.clearCart();
+        });
       },
       error: () => {
         this.submitting.set(false);
