@@ -26,6 +26,8 @@
   grid-template-columns: 260px 1fr;
   gap: 2rem;
   padding: 2rem 0 5rem;
+
+  > * { min-width: 0; }
 }
 
 // ── Sidebar Filters ───────────────────────────────────────────
