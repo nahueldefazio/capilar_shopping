@@ -2,10 +2,26 @@ Options -Indexes
 
 RewriteEngine On
 
+# CORS: match allowed origins
+SetEnvIf Origin "^(https://lemonchiffon-goldfish-284566\.hostingersite\.com|https://navajowhite-quetzal-176085\.hostingersite\.com)$" CORS_ORIGIN=$1
+Header always set Access-Control-Allow-Origin "%{CORS_ORIGIN}e" env=CORS_ORIGIN
+Header always set Access-Control-Allow-Methods "GET, POST, PATCH, DELETE, OPTIONS"
+Header always set Access-Control-Allow-Headers "Content-Type, Authorization"
+Header always set Access-Control-Allow-Credentials "true"
+Header always set Access-Control-Max-Age "3600"
+
+# OPTIONS preflight
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^ - [R=204,L]
+
+# Route /api/ and /uploads/ through PHP proxy to Node.js
+RewriteCond %{REQUEST_URI} ^/(api|uploads)/
+RewriteRule ^ /api-proxy.php [QSA,L]
+
 # Serve existing files or directories directly
 RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -f [OR]
 RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} -d
 RewriteRule ^ - [L]
 
-# Redirect everything else to index.html (Angular routing)
+# Angular SPA routing
 RewriteRule ^ /index.html [L]

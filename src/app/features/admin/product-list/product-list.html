@@ -33,10 +33,31 @@
             </td>
             <td>{{ product.price | currencyAr }}</td>
             <td>
-              <span [class.low-stock]="product.stock <= 5 && product.stock > 0"
-                [class.no-stock]="product.stock === 0">
-                {{ product.stock }}
-              </span>
+              @if (editingStockId() === product.id) {
+                <div class="stock-edit">
+                  <input
+                    class="stock-input"
+                    type="number"
+                    min="0"
+                    [ngModel]="editingStockValue"
+                    (ngModelChange)="editingStockValue = $event"
+                    (keyup.enter)="saveStock(product)"
+                    (keyup.escape)="cancelEditStock()"
+                  />
+                  <button class="stock-btn stock-btn--save" (click)="saveStock(product)" title="Guardar">✓</button>
+                  <button class="stock-btn stock-btn--cancel" (click)="cancelEditStock()" title="Cancelar">✕</button>
+                </div>
+              } @else {
+                <button
+                  class="stock-display"
+                  [class.low-stock]="product.stock <= 10 && product.stock > 0"
+                  [class.no-stock]="product.stock === 0"
+                  (click)="startEditStock(product)"
+                  title="Click para editar stock"
+                >
+                  {{ product.stock }}
+                </button>
+              }
             </td>
             <td>
               <button class="status-toggle" [class.status-toggle--active]="product.isActive"

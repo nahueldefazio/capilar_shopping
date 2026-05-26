@@ -84,6 +84,12 @@ export class ProductService {
     this.updateProduct(id, { isActive: !product.isActive });
   }
 
+  updateStock(id: string, stock: number): void {
+    this.http.patch<Product>(`${this.base}/products/${id}/stock`, { stock }).subscribe((updated) => {
+      this._products.update((list) => list.map((p) => (p.id === updated.id ? updated : p)));
+    });
+  }
+
   reload(): void {
     this._loaded = false;
     this.load();
