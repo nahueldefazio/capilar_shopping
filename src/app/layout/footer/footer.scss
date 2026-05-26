@@ -1,38 +1,50 @@
 .footer {
-  background: #2c1810;
-  color: #e8d5c4;
+  background: linear-gradient(160deg, #1A1010 0%, #2E1818 100%);
+  color: rgba(255,255,255,0.75);
   margin-top: auto;
 
   &__container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 3rem 1rem 2rem;
+    padding: 3.5rem 1.25rem 2.5rem;
     display: grid;
     grid-template-columns: 2fr 1fr 1fr 1.5fr;
-    gap: 2rem;
+    gap: 2.5rem;
   }
 
   &__brand {
-    &-icon {
-      font-size: 1.5rem;
+    &-logo {
+      height: 48px;
+      width: auto;
+      margin-bottom: 0.75rem;
+      filter: brightness(0) invert(1) opacity(0.85);
     }
 
     &-name {
       display: block;
-      font-size: 1.1rem;
-      color: #fff;
-      margin-top: 0.25rem;
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      color: var(--clr-white);
+      margin-bottom: 0.25rem;
 
-      strong {
-        color: #c4956a;
-      }
+      strong { color: var(--clr-primary); }
     }
 
     &-tagline {
-      margin-top: 0.5rem;
-      font-size: 0.875rem;
-      color: #a89080;
+      margin-top: 0.4rem;
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.04em;
     }
+  }
+
+  &__links-title {
+    color: var(--clr-white);
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-bottom: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
   }
 
   &__links {
@@ -40,32 +52,20 @@
     flex-direction: column;
     gap: 0.5rem;
 
-    a,
-    span {
-      color: #b8a898;
+    a, span {
+      color: rgba(255,255,255,0.55);
       text-decoration: none;
       font-size: 0.875rem;
-      transition: color 0.15s;
+      transition: color var(--transition);
 
-      &:hover {
-        color: #e8d5c4;
-      }
+      &:hover { color: var(--clr-primary); }
     }
-  }
-
-  &__links-title {
-    color: #fff;
-    font-size: 0.875rem;
-    font-weight: 600;
-    margin-bottom: 0.25rem;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
   }
 
   &__contact {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.875rem;
   }
 
   &__whatsapp-btn {
@@ -73,29 +73,31 @@
     align-items: center;
     gap: 0.5rem;
     background: #25d366;
-    color: #fff;
+    color: var(--clr-white);
     border: none;
-    border-radius: 8px;
-    padding: 0.625rem 1rem;
+    border-radius: var(--radius-md);
+    padding: 0.7rem 1.1rem;
     font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
-    transition: background 0.15s;
+    transition: background var(--transition), transform var(--transition);
     width: fit-content;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
 
     &:hover {
       background: #1ebe5d;
+      transform: translateY(-1px);
     }
   }
 
   &__bottom {
-    border-top: 1px solid #3d2418;
-    padding: 1rem;
+    border-top: 1px solid rgba(196, 144, 122, 0.15);
+    padding: 1.25rem;
     text-align: center;
 
     p {
       font-size: 0.8rem;
-      color: #7a6050;
+      color: rgba(255,255,255,0.35);
     }
   }
 }
@@ -106,16 +108,10 @@
       grid-template-columns: 1fr 1fr;
     }
 
-    &__brand {
-      grid-column: 1 / -1;
-    }
+    &__brand { grid-column: 1 / -1; }
   }
 }
 
 @media (max-width: 480px) {
-  .footer {
-    &__container {
-      grid-template-columns: 1fr;
-    }
-  }
+  .footer__container { grid-template-columns: 1fr; }
 }

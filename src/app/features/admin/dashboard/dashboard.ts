@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, effect } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { ProductService } from '../../../core/services/product.service';
@@ -28,13 +28,19 @@ export class AdminDashboardComponent implements OnInit {
 
   recentOrders = signal<Order[]>([]);
 
+  constructor() {
+    effect(() => {
+      const products = this.productService.products();
+      this.stats.update((s) => ({
+        ...s,
+        totalProducts: products.length,
+        activeProducts: products.filter((p) => p.isActive).length,
+      }));
+    });
+  }
+
   ngOnInit(): void {
-    const products = this.productService.getAllProductsAdmin();
-    this.stats.update((s) => ({
-      ...s,
-      totalProducts: products.length,
-      activeProducts: products.filter((p) => p.isActive).length,
-    }));
+    this.productService.load();
 
     this.orderService.getOrders().subscribe((orders) => {
       const today = new Date().toDateString();

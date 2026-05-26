@@ -1,6 +1,10 @@
 <article class="product-card">
   <a class="product-card__image-wrap" [routerLink]="['/productos', product.slug]">
-    <img class="product-card__image" [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
+    @if (product.imageUrl) {
+      <img class="product-card__image" [src]="product.imageUrl" [alt]="product.name" loading="lazy" />
+    } @else {
+      <div class="product-card__placeholder">🧴</div>
+    }
     @if (product.featured) {
       <span class="product-card__featured-tag">Destacado</span>
     }
@@ -12,7 +16,6 @@
   <div class="product-card__body">
     <div class="product-card__meta">
       <app-badge [saleType]="product.saleType" [variant]="product.saleType" />
-      <span class="product-card__category">{{ product.categoryName }}</span>
     </div>
 
     <h3 class="product-card__name">
@@ -22,7 +25,12 @@
     <p class="product-card__description">{{ product.description }}</p>
 
     <div class="product-card__footer">
-      <span class="product-card__price">{{ product.price | currencyAr }}</span>
+      <div class="product-card__price-group">
+        <span class="product-card__price">{{ product.price | currencyAr }}</span>
+        <span class="product-card__stock" [class.product-card__stock--out]="product.stock === 0">
+          {{ product.stock > 0 ? '● En stock' : '● Sin stock' }}
+        </span>
+      </div>
 
       <div class="product-card__actions">
         <a class="btn btn--outline btn--sm" [routerLink]="['/productos', product.slug]">Ver más</a>
@@ -30,7 +38,7 @@
           class="btn btn--primary btn--sm"
           [disabled]="product.stock === 0"
           (click)="onAddToCart($event)">
-          {{ product.stock > 0 ? 'Agregar' : 'Sin stock' }}
+          + Agregar
         </button>
       </div>
     </div>

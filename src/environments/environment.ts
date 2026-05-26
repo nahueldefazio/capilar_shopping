@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3000/api',
+  apiUrl: 'https://navajowhite-quetzal-176085.hostingersite.com/api',
 };

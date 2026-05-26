@@ -1,8 +1,11 @@
 <header class="header">
   <div class="header__container">
     <a class="header__brand" routerLink="/" (click)="closeMenu()">
-      <span class="header__brand-icon">✂</span>
-      <span class="header__brand-name">Capilar <strong>Shopping</strong></span>
+      <img class="header__brand-logo" src="logo.png" alt="Capilar Shopping" onerror="this.style.display='none'">
+      <div class="header__brand-text">
+        <span class="header__brand-name">Capilar <strong>Shopping</strong></span>
+        <span class="header__brand-tagline">Todo para tu cabello</span>
+      </div>
     </a>
 
     <nav class="header__nav" [class.header__nav--open]="menuOpen">
@@ -10,10 +13,12 @@
         [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">Inicio</a>
       <a class="header__nav-link" routerLink="/productos" routerLinkActive="header__nav-link--active"
         (click)="closeMenu()">Productos</a>
-      <a class="header__nav-link" [routerLink]="['/productos']" [queryParams]="{ tipo: 'salon' }"
-        routerLinkActive="header__nav-link--active" (click)="closeMenu()">Peluquerías</a>
-      <a class="header__nav-link" [routerLink]="['/productos']" [queryParams]="{ tipo: 'wholesale' }"
-        routerLinkActive="header__nav-link--active" (click)="closeMenu()">Mayorista</a>
+      <a class="header__nav-link" routerLink="/combos" routerLinkActive="header__nav-link--active"
+        (click)="closeMenu()">Combos</a>
+      <a class="header__nav-link" routerLink="/peluquerias" routerLinkActive="header__nav-link--active"
+        (click)="closeMenu()">Peluquerías</a>
+      <a class="header__nav-link" routerLink="/mayorista" routerLinkActive="header__nav-link--active"
+        (click)="closeMenu()">Mayorista</a>
     </nav>
 
     <div class="header__actions">

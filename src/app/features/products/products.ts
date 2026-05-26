@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../core/services/product.service';
 import { CartStore } from '../../core/services/cart.store';
 import { CategoryService } from '../../core/services/category.service';
-import { Product, Category, SaleType } from '../../core/models';
+import { Product, SaleType } from '../../core/models';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card';
 import { LoadingComponent } from '../../shared/components/loading/loading';
 
@@ -24,12 +24,12 @@ export class ProductsComponent implements OnInit {
   private categoryService = inject(CategoryService);
   private route = inject(ActivatedRoute);
 
-  categories = signal<Category[]>([]);
+  categories = this.categoryService.categories;
   searchQuery = signal('');
   selectedCategory = signal('todos');
   selectedSaleType = signal<FilterSaleType>('all');
   sortBy = signal<SortOption>('default');
-  loading = signal(false);
+  loading = this.productService.loading;
 
   filteredProducts = computed(() => {
     const saleType = this.selectedSaleType() === 'all' ? undefined : this.selectedSaleType() as SaleType;
@@ -49,7 +49,8 @@ export class ProductsComponent implements OnInit {
   });
 
   ngOnInit(): void {
-    this.categories.set(this.categoryService.getCategories());
+    this.productService.load();
+    this.categoryService.load();
 
     this.route.queryParams.subscribe((params) => {
       if (params['categoria']) this.selectedCategory.set(params['categoria']);

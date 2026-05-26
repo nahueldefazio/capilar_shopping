@@ -1,29 +1,29 @@
-import { Component, inject, OnInit, computed } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ProductService } from '../../core/services/product.service';
 import { CartStore } from '../../core/services/cart.store';
 import { WhatsAppService } from '../../core/services/whatsapp.service';
 import { Product } from '../../core/models';
-
 import { ProductCardComponent } from '../../shared/components/product-card/product-card';
 import { LoadingComponent } from '../../shared/components/loading/loading';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-wholesale',
   standalone: true,
   imports: [RouterLink, ProductCardComponent, LoadingComponent],
-  templateUrl: './home.html',
-  styleUrl: './home.scss',
+  templateUrl: './wholesale.html',
+  styleUrl: './wholesale.scss',
 })
-export class HomeComponent implements OnInit {
+export class WholesaleComponent {
   private productService = inject(ProductService);
   private cartStore = inject(CartStore);
-  private whatsapp = inject(WhatsAppService);
+  private wa = inject(WhatsAppService);
 
   loading = this.productService.loading;
-
-  featuredProducts = computed(() =>
-    this.productService.products().filter((p) => p.isActive && p.featured).slice(0, 4)
+  wholesaleProducts = computed(() =>
+    this.productService.products()
+      .filter(p => p.isActive && p.saleType === 'wholesale')
+      .slice(0, 8)
   );
 
   ngOnInit(): void {
@@ -34,11 +34,7 @@ export class HomeComponent implements OnInit {
     this.cartStore.addItem(product, 1);
   }
 
-  openWhatsAppContact(): void {
-    this.whatsapp.openWhatsApp(this.whatsapp.buildContactMessage());
-  }
-
-  openWhatsAppWholesale(): void {
-    this.whatsapp.openWhatsApp(this.whatsapp.buildWholesaleMessage());
+  openWhatsApp(): void {
+    this.wa.openWhatsApp('Hola, quiero consultar condiciones mayoristas y hacer un pedido grande en Capilar Shopping.');
   }
 }

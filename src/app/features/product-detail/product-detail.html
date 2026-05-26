@@ -1,4 +1,6 @@
-@if (notFound()) {
+@if (loading()) {
+  <app-loading text="Cargando producto..." [fullPage]="true" />
+} @else if (notFound()) {
   <div class="container not-found">
     <span class="not-found__icon">🔍</span>
     <h2>Producto no encontrado</h2>

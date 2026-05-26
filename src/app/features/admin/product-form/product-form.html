@@ -64,8 +64,11 @@
         </div>
 
         <div class="form-field form-field--full">
-          <label class="form-label">URL de imagen</label>
-          <input class="form-input" formControlName="imageUrl" placeholder="https://..." />
+          <label class="form-label">Imagen del producto</label>
+          <app-image-upload
+            [imageUrl]="form.get('imageUrl')?.value ?? ''"
+            (imageUrlChange)="onImageUrlChange($event)"
+          />
         </div>
       </div>
     </div>

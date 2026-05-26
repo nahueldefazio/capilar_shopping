@@ -27,6 +27,30 @@
   </div>
 </section>
 
+<!-- BARRA DE CONFIANZA -->
+<div class="trust-bar">
+  <div class="container">
+    <div class="trust-bar__items">
+      <div class="trust-bar__item">
+        <span class="trust-bar__icon">📦</span>
+        <span>Envíos a todo el país</span>
+      </div>
+      <div class="trust-bar__item">
+        <span class="trust-bar__icon">✅</span>
+        <span>Stock real y actualizado</span>
+      </div>
+      <div class="trust-bar__item">
+        <span class="trust-bar__icon">💬</span>
+        <span>Atención por WhatsApp</span>
+      </div>
+      <div class="trust-bar__item">
+        <span class="trust-bar__icon">🔁</span>
+        <span>Precios para reventa disponibles</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- CATEGORÍAS -->
 <section class="section categories">
   <div class="container">
@@ -64,10 +88,53 @@
       <a class="section__link" routerLink="/productos">Ver todos →</a>
     </div>
 
-    <div class="products-grid">
-      @for (product of featuredProducts(); track product.id) {
-        <app-product-card [product]="product" (addToCart)="addToCart($event)" />
-      }
+    @if (loading()) {
+      <app-loading text="Cargando productos..." [fullPage]="false" />
+    } @else {
+      <div class="products-grid">
+        @for (product of featuredProducts(); track product.id) {
+          <app-product-card [product]="product" (addToCart)="addToCart($event)" />
+        }
+      </div>
+    }
+  </div>
+</section>
+
+<!-- COMBOS -->
+<section class="section combos-section">
+  <div class="container">
+    <div class="section__header">
+      <h2 class="section__title">Combos armados para cada necesidad</h2>
+      <a class="section__link" routerLink="/combos">Ver todos →</a>
+    </div>
+    <div class="combos-grid">
+      <a class="combo-card" routerLink="/combos">
+        <div class="combo-card__icon">🧴</div>
+        <div class="combo-card__body">
+          <span class="combo-card__tag">Particular</span>
+          <h3 class="combo-card__title">Combo Cuidado Personal</h3>
+          <p class="combo-card__text">Shampoo + acondicionador + tratamiento. Todo lo que tu cabello necesita.</p>
+          <span class="combo-card__cta">Ver combo →</span>
+        </div>
+      </a>
+      <a class="combo-card combo-card--salon" routerLink="/combos">
+        <div class="combo-card__icon">✂</div>
+        <div class="combo-card__body">
+          <span class="combo-card__tag">Peluquería</span>
+          <h3 class="combo-card__title">Combo Peluquería Inicial</h3>
+          <p class="combo-card__text">Pack de inicio para tu salón. Productos profesionales al mejor precio.</p>
+          <span class="combo-card__cta">Ver combo →</span>
+        </div>
+      </a>
+      <a class="combo-card combo-card--wholesale" routerLink="/combos">
+        <div class="combo-card__icon">📦</div>
+        <div class="combo-card__body">
+          <span class="combo-card__tag">Mayorista</span>
+          <h3 class="combo-card__title">Combo Revendedor</h3>
+          <p class="combo-card__text">Cajas armadas para empezar a revender. Margen garantizado.</p>
+          <span class="combo-card__cta">Ver combo →</span>
+        </div>
+      </a>
     </div>
   </div>
 </section>

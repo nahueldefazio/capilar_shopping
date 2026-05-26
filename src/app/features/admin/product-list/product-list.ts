@@ -1,7 +1,8 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ProductService } from '../../../core/services/product.service';
 import { Product } from '../../../core/models';
+
 import { CurrencyArPipe } from '../../../shared/pipes/currency-ar.pipe';
 
 @Component({
@@ -13,14 +14,13 @@ import { CurrencyArPipe } from '../../../shared/pipes/currency-ar.pipe';
 })
 export class AdminProductListComponent implements OnInit {
   private productService = inject(ProductService);
-  products = signal<Product[]>([]);
+  products = computed(() => this.productService.products());
 
   ngOnInit(): void {
-    this.products.set(this.productService.getAllProductsAdmin());
+    this.productService.load();
   }
 
   toggleStatus(product: Product): void {
     this.productService.toggleProductStatus(product.id);
-    this.products.set(this.productService.getAllProductsAdmin());
   }
 }

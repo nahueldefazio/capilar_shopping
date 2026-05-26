@@ -11,7 +11,9 @@ export class CategoryService {
   private _categories = signal<Category[]>([]);
   private _loaded = false;
 
-  private _ensureLoaded(): void {
+  readonly categories = this._categories.asReadonly();
+
+  load(): void {
     if (this._loaded) return;
     this._loaded = true;
     this.http.get<Category[]>(`${this.base}/categories`).subscribe({
@@ -20,7 +22,6 @@ export class CategoryService {
   }
 
   getCategories(): Category[] {
-    this._ensureLoaded();
     return this._categories();
   }
 }

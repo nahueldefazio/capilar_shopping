@@ -21,10 +21,10 @@ const SALE_TYPE_LABELS: Record<SaleType, string> = {
       text-transform: uppercase;
       letter-spacing: 0.04em;
 
-      &--retail { background: #e8f4e8; color: #2d6a2d; }
-      &--salon { background: #e8e4f4; color: #3d2d7a; }
-      &--wholesale { background: #f4e8d4; color: #7a4a1a; }
-      &--featured { background: #fff3cd; color: #856404; }
+      &--retail    { background: var(--clr-primary-xlight); color: var(--clr-primary-dark); }
+      &--salon     { background: rgba(94, 68, 168, 0.10); color: #4a2ea0; }
+      &--wholesale { background: rgba(26, 16, 16, 0.07); color: var(--clr-ink-mid); }
+      &--featured  { background: #fff3cd; color: #856404; }
     }
   `],
 })

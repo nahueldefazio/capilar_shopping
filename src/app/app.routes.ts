@@ -15,6 +15,18 @@ export const routes: Routes = [
     loadComponent: () => import('./features/product-detail/product-detail').then((m) => m.ProductDetailComponent),
   },
   {
+    path: 'peluquerias',
+    loadComponent: () => import('./features/salon/salon').then((m) => m.SalonComponent),
+  },
+  {
+    path: 'mayorista',
+    loadComponent: () => import('./features/wholesale/wholesale').then((m) => m.WholesaleComponent),
+  },
+  {
+    path: 'combos',
+    loadComponent: () => import('./features/combos/combos').then((m) => m.CombosComponent),
+  },
+  {
     path: 'carrito',
     loadComponent: () => import('./features/cart/cart').then((m) => m.CartComponent),
   },

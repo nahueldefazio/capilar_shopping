@@ -1,0 +1,131 @@
+<!-- HERO -->
+<section class="wholesale-hero">
+  <div class="container">
+    <div class="wholesale-hero__content">
+      <span class="wholesale-hero__eyebrow">📦 Venta mayorista</span>
+      <h1 class="wholesale-hero__title">
+        Comprá al por mayor<br />
+        <em>sin complicaciones.</em>
+      </h1>
+      <p class="wholesale-hero__subtitle">
+        Productos capilares en cajas, packs y combos para revendedores. Precios directos,
+        sin intermediarios. Comprás desde la tienda y coordinamos el resto.
+      </p>
+      <div class="wholesale-hero__actions">
+        <a class="btn btn--primary btn--lg" [routerLink]="['/productos']" [queryParams]="{ tipo: 'wholesale' }">
+          Ver catálogo mayorista
+        </a>
+        <button class="btn btn--light btn--lg" (click)="openWhatsApp()">
+          Consultar pedido grande
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONDICIONES -->
+<section class="section wholesale-conditions">
+  <div class="container">
+    <h2 class="section__title">Cómo funciona la venta mayorista</h2>
+    <div class="wholesale-conditions__grid">
+      <div class="condition-card">
+        <span class="condition-card__icon">📦</span>
+        <h3>Venta por caja cerrada</h3>
+        <p>Los productos mayoristas se venden por unidades mínimas según el artículo. Sin necesidad de comprar cantidades imposibles.</p>
+      </div>
+      <div class="condition-card">
+        <span class="condition-card__icon">💲</span>
+        <h3>Precios diferenciados</h3>
+        <p>Precio especial por volumen de compra. Cuanto más comprás, mejor precio. Sin costos ocultos ni sorpresas.</p>
+      </div>
+      <div class="condition-card">
+        <span class="condition-card__icon">🚚</span>
+        <h3>Coordinamos el envío</h3>
+        <p>Enviamos a todo el país o coordinamos retiro en zona. Te avisamos cuando el pedido está listo.</p>
+      </div>
+      <div class="condition-card">
+        <span class="condition-card__icon">💬</span>
+        <h3>Compra directa desde la tienda</h3>
+        <p>Podés hacer tu pedido directamente acá. Sin llamadas obligatorias, sin burocracia.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUCTOS MAYORISTAS -->
+<section class="section">
+  <div class="container">
+    <div class="section__header">
+      <h2 class="section__title">Productos mayoristas</h2>
+      <a class="section__link" [routerLink]="['/productos']" [queryParams]="{ tipo: 'wholesale' }">Ver todos →</a>
+    </div>
+
+    @if (loading()) {
+      <app-loading text="Cargando productos..." [fullPage]="false" />
+    } @else if (wholesaleProducts().length > 0) {
+      <div class="products-grid">
+        @for (product of wholesaleProducts(); track product.id) {
+          <app-product-card [product]="product" (addToCart)="addToCart($event)" />
+        }
+      </div>
+    } @else {
+      <div class="wholesale-empty">
+        <p>Estamos actualizando el catálogo mayorista. <a [routerLink]="['/productos']">Ver todos los productos →</a></p>
+      </div>
+    }
+  </div>
+</section>
+
+<!-- COMBOS PARA REVENDER -->
+<section class="section wholesale-combos">
+  <div class="container">
+    <h2 class="section__title">Combos para revender</h2>
+    <div class="wholesale-combos__grid">
+      <div class="wholesale-combo">
+        <div class="wholesale-combo__header">
+          <span class="wholesale-combo__icon">📦</span>
+          <span class="wholesale-combo__badge">Más vendido</span>
+        </div>
+        <h3 class="wholesale-combo__title">Combo Revendedor Básico</h3>
+        <p class="wholesale-combo__text">Ideal para empezar. Productos de rotación alta con margen garantizado.</p>
+        <ul class="wholesale-combo__list">
+          <li>Shampoo x 6 unidades</li>
+          <li>Acondicionador x 6 unidades</li>
+          <li>Máscara capilar x 3 unidades</li>
+        </ul>
+        <a class="btn btn--primary" routerLink="/combos">Ver combo completo</a>
+      </div>
+
+      <div class="wholesale-combo wholesale-combo--alt">
+        <div class="wholesale-combo__header">
+          <span class="wholesale-combo__icon">🧴</span>
+        </div>
+        <h3 class="wholesale-combo__title">Combo Mayorista Premium</h3>
+        <p class="wholesale-combo__text">Caja completa de tratamientos y cuidado capilar para reventa o salón propio.</p>
+        <ul class="wholesale-combo__list">
+          <li>Shampoo x 12 unidades</li>
+          <li>Máscara nutritiva x 6 unidades</li>
+          <li>Aceite reparador x 4 unidades</li>
+          <li>Sérum capilar x 4 unidades</li>
+        </ul>
+        <a class="btn btn--outline" routerLink="/combos">Ver combo completo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section wholesale-cta">
+  <div class="container">
+    <div class="wholesale-cta__card">
+      <div class="wholesale-cta__icon">📦</div>
+      <div class="wholesale-cta__content">
+        <h2>¿Necesitás un pedido especial o una cantidad fuera de lo estándar?</h2>
+        <p>Escribinos por WhatsApp y armamos juntos el pedido que necesitás. Respondemos rápido.</p>
+      </div>
+      <button class="btn btn--primary btn--lg" (click)="openWhatsApp()">
+        Consultar por WhatsApp
+      </button>
+    </div>
+  </div>
+</section>

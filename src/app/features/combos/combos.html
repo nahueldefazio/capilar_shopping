@@ -1,0 +1,74 @@
+<!-- HERO -->
+<section class="combos-hero">
+  <div class="container">
+    <div class="combos-hero__content">
+      <span class="combos-hero__eyebrow">🎁 Packs armados</span>
+      <h1 class="combos-hero__title">
+        Combos para cada<br />
+        <em>necesidad.</em>
+      </h1>
+      <p class="combos-hero__subtitle">
+        Ahorrás tiempo y dinero con nuestros packs pensados para particulares,
+        peluquerías y revendedores. Todo armado, listo para llevar.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- FILTROS DE TIPO -->
+<div class="combos-filter">
+  <div class="container">
+    <div class="combos-filter__tabs">
+      <span class="combos-filter__label">Ver combos para:</span>
+      <a class="combos-filter__tab combos-filter__tab--active" routerLink="/combos">Todos</a>
+      <a class="combos-filter__tab" routerLink="/peluquerias">Peluquería</a>
+      <a class="combos-filter__tab" routerLink="/mayorista">Mayorista</a>
+    </div>
+  </div>
+</div>
+
+<!-- GRID DE COMBOS -->
+<section class="section combos-main">
+  <div class="container">
+    <div class="combos-grid">
+      @for (combo of combos; track combo.id) {
+        <div class="combo-detail-card" [class]="'combo-detail-card--' + combo.tagColor">
+          @if (combo.highlight) {
+            <div class="combo-detail-card__highlight">{{ combo.highlight }}</div>
+          }
+          <div class="combo-detail-card__top">
+            <span class="combo-detail-card__icon">{{ combo.icon }}</span>
+            <span class="combo-detail-card__tag combo-detail-card__tag--{{ combo.tagColor }}">
+              {{ combo.tag }}
+            </span>
+          </div>
+          <h2 class="combo-detail-card__title">{{ combo.title }}</h2>
+          <p class="combo-detail-card__description">{{ combo.description }}</p>
+          <ul class="combo-detail-card__list">
+            @for (item of combo.items; track item) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+          <div class="combo-detail-card__actions">
+            <button class="btn btn--primary" (click)="openWhatsApp(combo.title)">
+              Consultar por WhatsApp
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section combos-cta">
+  <div class="container">
+    <div class="combos-cta__card">
+      <h2>¿No encontrás el combo que buscás?</h2>
+      <p>Escribinos y armamos un pack a medida según tus necesidades y presupuesto.</p>
+      <button class="btn btn--primary btn--lg" (click)="openWhatsApp('un combo personalizado')">
+        Consultar combo personalizado
+      </button>
+    </div>
+  </div>
+</section>

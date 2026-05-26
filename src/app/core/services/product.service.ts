@@ -13,8 +13,9 @@ export class ProductService {
   private _loaded = false;
 
   loading = this._loading.asReadonly();
+  products = this._products.asReadonly();
 
-  private _ensureLoaded(): void {
+  load(): void {
     if (this._loaded) return;
     this._loaded = true;
     this._loading.set(true);
@@ -28,17 +29,14 @@ export class ProductService {
   }
 
   getProducts(): Product[] {
-    this._ensureLoaded();
     return this._products().filter((p) => p.isActive);
   }
 
   getFeaturedProducts(): Product[] {
-    this._ensureLoaded();
     return this._products().filter((p) => p.isActive && p.featured);
   }
 
   getProductBySlug(slug: string): Product | undefined {
-    this._ensureLoaded();
     return this._products().find((p) => p.slug === slug && p.isActive);
   }
 
@@ -54,7 +52,6 @@ export class ProductService {
   }
 
   searchProducts(query: string, categorySlug?: string, saleType?: SaleType): Product[] {
-    this._ensureLoaded();
     const q = query.toLowerCase().trim();
     return this._products().filter((p) => {
       if (!p.isActive) return false;
@@ -66,7 +63,6 @@ export class ProductService {
   }
 
   getAllProductsAdmin(): Product[] {
-    this._ensureLoaded();
     return this._products();
   }
 
@@ -90,6 +86,6 @@ export class ProductService {
 
   reload(): void {
     this._loaded = false;
-    this._ensureLoaded();
+    this.load();
   }
 }

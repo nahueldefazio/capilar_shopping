@@ -4,11 +4,12 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductService } from '../../../core/services/product.service';
 import { CategoryService } from '../../../core/services/category.service';
 import { Category, SaleType } from '../../../core/models';
+import { ImageUploadComponent } from '../../../shared/components/image-upload/image-upload';
 
 @Component({
   selector: 'app-admin-product-form',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, ImageUploadComponent],
   templateUrl: './product-form.html',
   styleUrl: './product-form.scss',
 })
@@ -39,6 +40,8 @@ export class AdminProductFormComponent implements OnInit {
   });
 
   ngOnInit(): void {
+    this.productService.load();
+    this.categoryService.load();
     this.categories.set(this.categoryService.getCategories());
 
     const id = this.route.snapshot.params['id'];
@@ -59,6 +62,10 @@ export class AdminProductFormComponent implements OnInit {
       const cat = this.categories().find((c) => c.id === catId);
       if (cat) this.form.get('categoryName')?.setValue(cat.name, { emitEvent: false });
     });
+  }
+
+  onImageUrlChange(url: string): void {
+    this.form.get('imageUrl')?.setValue(url);
   }
 
   isFieldInvalid(field: string): boolean {
