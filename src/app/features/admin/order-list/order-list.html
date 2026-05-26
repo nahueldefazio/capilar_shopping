@@ -12,21 +12,23 @@
           <th>Cliente</th>
           <th>Tipo</th>
           <th>Total</th>
-          <th>Pago</th>
+          <th>Método pago</th>
+          <th>Estado pago</th>
           <th>Entrega</th>
-          <th>Estado</th>
+          <th>Estado pedido</th>
           <th>Fecha</th>
-          <th>Cambiar estado</th>
+          <th>Acciones</th>
         </tr>
       </thead>
       <tbody>
         @for (order of orders(); track order.id) {
-          <tr>
+          <tr class="order-row" (click)="toggleItems(order.id)" (keydown.enter)="toggleItems(order.id)" tabindex="0" style="cursor:pointer">
             <td><strong>{{ order.orderNumber }}</strong></td>
             <td>
               <div class="order-customer">
                 <strong>{{ order.customer.fullName }}</strong>
                 <span>{{ order.customer.email }}</span>
+                <span>{{ order.customer.phone }}</span>
               </div>
             </td>
             <td>
@@ -41,6 +43,13 @@
               </span>
             </td>
             <td>
+              <span class="payment-status payment-status--{{ order.paymentStatus }}">
+                {{ order.paymentStatus === 'approved' ? '✅ Aprobado' :
+                   order.paymentStatus === 'rejected' ? '❌ Rechazado' :
+                   order.paymentStatus === 'refunded' ? '↩️ Reembolsado' : '⏳ Pendiente' }}
+              </span>
+            </td>
+            <td>
               <span class="delivery-badge">
                 {{ order.deliveryMethod === 'home_delivery' ? '🚚 Domicilio' : order.deliveryMethod === 'pickup' ? '📦 Retiro' : '💬 WhatsApp' }}
               </span>
@@ -51,19 +60,52 @@
               </span>
             </td>
             <td>{{ order.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
-            <td>
+            <td class="actions-cell" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
               <select class="status-select" [value]="order.status"
                 (change)="updateStatus(order, $any($event.target).value)">
                 @for (status of statuses; track status) {
                   <option [value]="status">{{ statusLabels[status] }}</option>
                 }
               </select>
+              @if (order.paymentStatus !== 'approved') {
+                <button class="btn-confirm-payment"
+                  [disabled]="confirmingId() === order.id"
+                  (click)="confirmPayment(order)">
+                  {{ confirmingId() === order.id ? '...' : '✓ Confirmar pago' }}
+                </button>
+              }
             </td>
           </tr>
-          @if (order.notes) {
-            <tr class="order-notes-row">
-              <td colspan="9">
-                <span class="order-notes">📝 {{ order.notes }}</span>
+
+          @if (expandedId() === order.id) {
+            <tr class="order-items-row">
+              <td colspan="10">
+                <div class="order-items">
+                  <strong class="order-items__title">Productos del pedido:</strong>
+                  <table class="order-items__table">
+                    <thead>
+                      <tr>
+                        <th>Producto</th>
+                        <th>Precio unit.</th>
+                        <th>Cantidad</th>
+                        <th>Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (item of order.items; track item.id) {
+                        <tr>
+                          <td>{{ item.productName }}</td>
+                          <td>{{ item.unitPrice | currencyAr }}</td>
+                          <td>x{{ item.quantity }}</td>
+                          <td><strong>{{ item.subtotal | currencyAr }}</strong></td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                  @if (order.notes) {
+                    <p class="order-notes">📝 {{ order.notes }}</p>
+                  }
+                </div>
               </td>
             </tr>
           }

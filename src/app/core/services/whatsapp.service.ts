@@ -12,7 +12,7 @@ export class WhatsAppService {
 
   buildOrderMessage(order: Order): string {
     const itemsList = order.items
-      .map((i) => `• ${i.product.name} x${i.quantity} — $${i.subtotal.toLocaleString('es-AR')}`)
+      .map((i) => `• ${i.productName} x${i.quantity} — $${i.subtotal.toLocaleString('es-AR')}`)
       .join('\n');
     return (
       `Hola! Acabo de hacer un pedido.\n\n` +

@@ -26,6 +26,8 @@ export class AdminOrderListComponent implements OnInit {
 
   orders = signal<Order[]>([]);
   loading = signal(true);
+  confirmingId = signal<string | null>(null);
+  expandedId = signal<string | null>(null);
   statusLabels = ORDER_STATUS_LABELS;
   statuses: OrderStatus[] = ['created', 'pending_payment', 'paid', 'preparing', 'shipped', 'delivered', 'cancelled'];
 
@@ -45,5 +47,20 @@ export class AdminOrderListComponent implements OnInit {
         this.orders.update((list) => list.map((o) => (o.id === updated.id ? updated : o)));
       },
     });
+  }
+
+  confirmPayment(order: Order): void {
+    this.confirmingId.set(order.id);
+    this.orderService.confirmPayment(order.id, 'approved').subscribe({
+      next: (updated) => {
+        this.orders.update((list) => list.map((o) => (o.id === updated.id ? updated : o)));
+        this.confirmingId.set(null);
+      },
+      error: () => this.confirmingId.set(null),
+    });
+  }
+
+  toggleItems(orderId: string): void {
+    this.expandedId.update((id) => (id === orderId ? null : orderId));
   }
 }

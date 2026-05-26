@@ -2,7 +2,7 @@ import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { CartItem, Customer, Order, OrderStatus, PaymentMethod, DeliveryMethod } from '../models';
+import { CartItem, Customer, Order, OrderStatus, PaymentStatus, PaymentMethod, DeliveryMethod } from '../models';
 import { environment } from '../../../environments/environment';
 
 export interface CheckoutData {
@@ -47,11 +47,17 @@ export class OrderService {
   }
 
   getOrderById(id: string): Observable<Order> {
-    return this.http.get<Order>(`${this.base}/orders/${id}`);
+    return this.http.get<Order>(`${this.base}/checkout/order/${id}`);
   }
 
   updateOrderStatus(id: string, status: OrderStatus): Observable<Order> {
     return this.http.patch<Order>(`${this.base}/orders/${id}/status`, { status }).pipe(
+      tap((updated) => this._orders.update((list) => list.map((o) => (o.id === updated.id ? updated : o))))
+    );
+  }
+
+  confirmPayment(id: string, paymentStatus: PaymentStatus): Observable<Order> {
+    return this.http.patch<Order>(`${this.base}/orders/${id}/payment-status`, { paymentStatus }).pipe(
       tap((updated) => this._orders.update((list) => list.map((o) => (o.id === updated.id ? updated : o))))
     );
   }

@@ -57,13 +57,81 @@
   max-width: 150px;
 }
 
-.order-notes-row td {
+.payment-status {
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+
+  &--approved { color: #16a34a; }
+  &--pending  { color: #b45309; }
+  &--rejected { color: #dc2626; }
+  &--refunded { color: #7c3aed; }
+}
+
+.actions-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  align-items: flex-start;
+}
+
+.btn-confirm-payment {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #16a34a;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+
+  &:hover:not(:disabled) { background: #15803d; }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
+.order-items-row td {
   background: #faf6f2;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1.25rem;
+}
+
+.order-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  &__title {
+    font-size: 0.8rem;
+    color: #5c3d2e;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+
+    th {
+      text-align: left;
+      padding: 0.3rem 0.75rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #6b4c3b;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    td {
+      padding: 0.35rem 0.75rem;
+      border-top: 1px solid #f0e8e0;
+      color: #2c1810;
+    }
+  }
 }
 
 .order-notes {
   font-size: 0.8rem;
   color: #7a6050;
   font-style: italic;
+  margin-top: 0.25rem;
 }

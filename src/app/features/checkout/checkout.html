@@ -9,9 +9,9 @@
     <div class="container">
       <h1 class="checkout-page__title">Finalizar compra</h1>
 
-      <div class="checkout-layout" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="checkout-layout">
         <!-- FORM -->
-        <form class="checkout-form" (ngSubmit)="onSubmit()">
+        <form class="checkout-form" [formGroup]="form" (ngSubmit)="onSubmit()">
 
           <!-- Datos personales -->
           <section class="checkout-section">
@@ -197,6 +197,10 @@
             <textarea class="form-input form-textarea" formControlName="notes"
               placeholder="Alguna indicación especial para tu pedido (opcional)..."></textarea>
           </section>
+
+          @if (errorMsg()) {
+            <div class="checkout-error">⚠️ {{ errorMsg() }}</div>
+          }
 
           <button type="submit" class="btn btn--primary btn--lg checkout-submit"
             [disabled]="submitting()">

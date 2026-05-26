@@ -3,11 +3,12 @@ import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from './layout/header/header';
 import { FooterComponent } from './layout/footer/footer';
 import { WhatsAppFabComponent } from './shared/components/whatsapp-fab/whatsapp-fab';
+import { ToastComponent } from './shared/components/toast/toast';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HeaderComponent, FooterComponent, WhatsAppFabComponent],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent, WhatsAppFabComponent, ToastComponent],
   template: `
     <app-header />
     <main class="main-content">
@@ -15,6 +16,7 @@ import { WhatsAppFabComponent } from './shared/components/whatsapp-fab/whatsapp-
     </main>
     <app-footer />
     <app-whatsapp-fab />
+    <app-toast />
   `,
   styles: [`
     :host {

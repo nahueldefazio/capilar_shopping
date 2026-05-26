@@ -1,9 +1,11 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, signal, inject } from '@angular/core';
 import { CartItem, Product } from '../models';
+import { ToastService } from './toast.service';
 
 @Injectable({ providedIn: 'root' })
 export class CartStore {
   private readonly STORAGE_KEY = 'capilar_cart';
+  private toast = inject(ToastService);
 
   readonly items = signal<CartItem[]>(this._loadFromStorage());
 
@@ -29,6 +31,7 @@ export class CartStore {
         updated = [...current, { product, quantity, subtotal: quantity * product.price }];
       }
       this._saveToStorage(updated);
+      this.toast.show(`"${product.name}" agregado al carrito`);
       return updated;
     });
   }
