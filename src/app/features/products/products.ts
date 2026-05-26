@@ -2,9 +2,8 @@ import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../core/services/product.service';
-import { CartStore } from '../../core/services/cart.store';
 import { CategoryService } from '../../core/services/category.service';
-import { Product, SaleType } from '../../core/models';
+import { SaleType } from '../../core/models';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card';
 import { LoadingComponent } from '../../shared/components/loading/loading';
 
@@ -20,7 +19,6 @@ type FilterSaleType = SaleType | 'all';
 })
 export class ProductsComponent implements OnInit {
   private productService = inject(ProductService);
-  private cartStore = inject(CartStore);
   private categoryService = inject(CategoryService);
   private route = inject(ActivatedRoute);
 
@@ -81,7 +79,4 @@ export class ProductsComponent implements OnInit {
     this.sortBy.set('default');
   }
 
-  addToCart(product: Product): void {
-    this.cartStore.addItem(product, 1);
-  }
 }

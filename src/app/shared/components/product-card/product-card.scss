@@ -158,5 +158,52 @@
   &__actions {
     display: flex;
     gap: 0.375rem;
+    align-items: center;
   }
+
+  &__add-group {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+
+    &--disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+}
+
+.qty-btn {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--clr-primary-light);
+  background: var(--clr-white);
+  color: var(--clr-primary);
+  border-radius: var(--radius-sm);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition), color var(--transition);
+  padding: 0;
+
+  &:hover:not(:disabled) {
+    background: var(--clr-primary-light);
+    color: var(--clr-white);
+  }
+
+  &:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+}
+
+.qty-value {
+  min-width: 1.4rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--clr-ink);
 }

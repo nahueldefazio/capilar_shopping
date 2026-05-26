@@ -22,16 +22,28 @@ export class CartStore {
       const existing = current.find((i) => i.product.id === product.id);
       let updated: CartItem[];
       if (existing) {
+        const newQty = existing.quantity + quantity;
         updated = current.map((i) =>
           i.product.id === product.id
-            ? { ...i, quantity: i.quantity + quantity, subtotal: (i.quantity + quantity) * product.price }
+            ? { ...i, quantity: newQty, subtotal: newQty * product.price }
             : i
         );
+        this.toast.show(product.name, {
+          imageUrl: product.imageUrl,
+          quantity: newQty,
+          subtotal: newQty * product.price,
+          isUpdate: true,
+        });
       } else {
         updated = [...current, { product, quantity, subtotal: quantity * product.price }];
+        this.toast.show(product.name, {
+          imageUrl: product.imageUrl,
+          quantity,
+          subtotal: quantity * product.price,
+          isUpdate: false,
+        });
       }
       this._saveToStorage(updated);
-      this.toast.show(`"${product.name}" agregado al carrito`);
       return updated;
     });
   }

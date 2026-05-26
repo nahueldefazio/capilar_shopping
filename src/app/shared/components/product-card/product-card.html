@@ -34,12 +34,17 @@
 
       <div class="product-card__actions">
         <a class="btn btn--outline btn--sm" [routerLink]="['/productos', product.slug]">Ver más</a>
-        <button
-          class="btn btn--primary btn--sm"
-          [disabled]="product.stock === 0"
-          (click)="onAddToCart($event)">
-          + Agregar
-        </button>
+        <div class="product-card__add-group" [class.product-card__add-group--disabled]="product.stock === 0">
+          <button class="qty-btn" (click)="decQty()" [disabled]="qty() <= 1 || product.stock === 0" aria-label="Restar">−</button>
+          <span class="qty-value">{{ qty() }}</span>
+          <button class="qty-btn" (click)="incQty()" [disabled]="product.stock === 0" aria-label="Sumar">+</button>
+          <button
+            class="btn btn--primary btn--sm"
+            [disabled]="product.stock === 0"
+            (click)="onAddToCart($event)">
+            Agregar
+          </button>
+        </div>
       </div>
     </div>
   </div>

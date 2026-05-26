@@ -74,10 +74,6 @@ export class ProductDetailComponent implements OnInit {
     setTimeout(() => this.addedToCart.set(false), 2500);
   }
 
-  addRelatedToCart(product: Product): void {
-    this.cartStore.addItem(product, 1);
-  }
-
   openWhatsApp(): void {
     const product = this.product();
     if (!product) return;

@@ -108,7 +108,7 @@
           <h2 class="section__title">Productos relacionados</h2>
           <div class="products-grid">
             @for (p of relatedProducts(); track p.id) {
-              <app-product-card [product]="p" (addToCart)="addRelatedToCart($event)" />
+              <app-product-card [product]="p" />
             }
           </div>
         </div>

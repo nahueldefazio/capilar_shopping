@@ -65,7 +65,7 @@
     } @else if (salonProducts().length > 0) {
       <div class="products-grid">
         @for (product of salonProducts(); track product.id) {
-          <app-product-card [product]="product" (addToCart)="addToCart($event)" />
+          <app-product-card [product]="product" />
         }
       </div>
     } @else {
