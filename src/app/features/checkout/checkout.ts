@@ -1,7 +1,7 @@
 import { Component, inject, signal, ElementRef, OnDestroy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Subject, debounceTime, takeUntil, distinctUntilChanged, combineLatest } from 'rxjs';
+import { Subject, debounceTime, takeUntil, merge } from 'rxjs';
 import { CartStore } from '../../core/services/cart.store';
 import { ShippingService } from '../../core/services/shipping.service';
 import { Customer, ShippingCalculationResult } from '../../core/models';
@@ -45,11 +45,13 @@ export class CheckoutComponent implements OnDestroy {
   });
 
   constructor() {
-    combineLatest([
+    merge(
       this.form.get('deliveryMethod')!.valueChanges,
       this.form.get('province')!.valueChanges,
-    ])
-      .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy$))
+      this.form.get('city')!.valueChanges,
+      this.form.get('postalCode')!.valueChanges,
+    )
+      .pipe(debounceTime(500), takeUntil(this.destroy$))
       .subscribe(() => this.recalculateShipping());
   }
 

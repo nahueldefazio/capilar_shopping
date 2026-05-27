@@ -106,12 +106,10 @@
 
             <div class="review-summary__line">
               <span>Envío</span>
-              @if (shippingMessage) {
-                <span class="review-summary__ship-coord">{{ shippingMessage }}</span>
-              } @else if (shippingCost > 0) {
-                <span>{{ shippingCost | currencyAr }}</span>
+              @if (shippingDisplay.label) {
+                <span class="review-summary__ship-coord">{{ shippingDisplay.label }}</span>
               } @else {
-                <span class="review-summary__ship-coord">a coordinar</span>
+                <span>{{ shippingDisplay.cost ?? 0 | currencyAr }}</span>
               }
             </div>
 
@@ -120,9 +118,9 @@
               <span>{{ grandTotal | currencyAr }}</span>
             </div>
 
-            @if (shippingMessage && state.deliveryMethod === 'home_delivery') {
+            @if (shippingDisplay.warn) {
               <div class="review-summary__warn">
-                ⚠️ {{ shippingMessage }}. Te vamos a contactar para coordinar la entrega.
+                ⚠️ {{ shippingDisplay.warn }}. Te vamos a contactar para coordinar la entrega.
               </div>
             }
 

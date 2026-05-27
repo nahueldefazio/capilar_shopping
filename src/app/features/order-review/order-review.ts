@@ -69,26 +69,22 @@ export class OrderReviewComponent implements OnInit {
     this.state = s as OrderReviewState;
   }
 
-  get shippingCost(): number {
+  get shippingDisplay(): { cost: number | null; label: string | null; warn: string | null } {
     const s = this.state;
-    if (!s || s.deliveryMethod !== 'home_delivery') return 0;
-    return s.shippingResult?.shippingCost ?? 0;
-  }
-
-  get shippingMessage(): string | null {
-    const s = this.state;
-    if (!s) return null;
+    if (!s) return { cost: null, label: '—', warn: null };
     if (s.deliveryMethod === 'pickup' || s.deliveryMethod === 'coordinate_by_whatsapp') {
-      return 'a coordinar';
+      return { cost: null, label: 'a coordinar', warn: null };
     }
     if (s.deliveryMethod === 'home_delivery') {
-      return s.shippingResult?.message ?? null;
+      if (!s.shippingResult) return { cost: null, label: '—', warn: null };
+      if (s.shippingResult.message) return { cost: null, label: 'a coordinar', warn: s.shippingResult.message };
+      return { cost: s.shippingResult.shippingCost, label: null, warn: null };
     }
-    return null;
+    return { cost: null, label: '—', warn: null };
   }
 
   get grandTotal(): number {
-    return this.cartStore.total() + this.shippingCost;
+    return this.cartStore.total() + (this.shippingDisplay.cost ?? 0);
   }
 
   get addressLine(): string {
