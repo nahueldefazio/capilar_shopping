@@ -14,38 +14,45 @@
 
       <div class="form-grid">
         <div class="form-field form-field--full">
-          <label class="form-label">Nombre *</label>
-          <input class="form-input" formControlName="name" placeholder="Shampoo Reparador 300ml" />
+          <label class="form-label" for="name">Nombre *</label>
+          <input id="name" class="form-input" formControlName="name" placeholder="Shampoo Reparador 300ml" />
           @if (isFieldInvalid('name')) { <span class="form-error">Nombre requerido</span> }
         </div>
 
         <div class="form-field form-field--full">
-          <label class="form-label">Slug (URL) *</label>
-          <input class="form-input" formControlName="slug" placeholder="shampoo-reparador-300ml" />
+          <label class="form-label" for="slug">Slug (URL) *</label>
+          <input id="slug" class="form-input" formControlName="slug" placeholder="shampoo-reparador-300ml" />
           @if (isFieldInvalid('slug')) { <span class="form-error">Slug requerido</span> }
         </div>
 
         <div class="form-field form-field--full">
-          <label class="form-label">Descripción *</label>
-          <textarea class="form-input form-textarea" formControlName="description" placeholder="Descripción del producto..."></textarea>
+          <label class="form-label" for="description">Descripción *</label>
+          <textarea id="description" class="form-input form-textarea" formControlName="description" placeholder="Descripción del producto..."></textarea>
           @if (isFieldInvalid('description')) { <span class="form-error">Descripción requerida</span> }
         </div>
 
         <div class="form-field">
-          <label class="form-label">Precio *</label>
-          <input class="form-input" type="number" formControlName="price" placeholder="2800" min="0" />
+          <label class="form-label" for="price">Precio *</label>
+          <input id="price" class="form-input" type="number" formControlName="price" placeholder="2800" min="0" />
           @if (isFieldInvalid('price')) { <span class="form-error">Precio requerido</span> }
         </div>
 
         <div class="form-field">
-          <label class="form-label">Stock *</label>
-          <input class="form-input" type="number" formControlName="stock" placeholder="50" min="0" />
+          <label class="form-label" for="stock">Stock *</label>
+          <input id="stock" class="form-input" type="number" formControlName="stock" placeholder="50" min="0" />
           @if (isFieldInvalid('stock')) { <span class="form-error">Stock requerido</span> }
         </div>
 
         <div class="form-field">
-          <label class="form-label">Categoría *</label>
-          <select class="form-input form-select" formControlName="categoryId">
+          <label class="form-label" for="weightGrams">Peso del producto (gramos) *</label>
+          <input id="weightGrams" class="form-input" type="number" formControlName="weightGrams" placeholder="500" min="0" />
+          <span class="form-hint">Usado para calcular el costo de envío. Ej: 500 = 500 g</span>
+          @if (isFieldInvalid('weightGrams')) { <span class="form-error">Peso requerido</span> }
+        </div>
+
+        <div class="form-field">
+          <label class="form-label" for="categoryId">Categoría *</label>
+          <select id="categoryId" class="form-input form-select" formControlName="categoryId">
             <option value="">Seleccioná una categoría</option>
             @for (cat of categories(); track cat.id) {
               <option [value]="cat.id">{{ cat.name }}</option>
@@ -55,8 +62,8 @@
         </div>
 
         <div class="form-field">
-          <label class="form-label">Tipo de venta *</label>
-          <select class="form-input form-select" formControlName="saleType">
+          <label class="form-label" for="saleType">Tipo de venta *</label>
+          <select id="saleType" class="form-input form-select" formControlName="saleType">
             <option value="retail">Particular</option>
             <option value="salon">Peluquería</option>
             <option value="wholesale">Mayorista</option>
@@ -64,7 +71,7 @@
         </div>
 
         <div class="form-field form-field--full">
-          <label class="form-label">Imagen del producto</label>
+          <span class="form-label">Imagen del producto</span>
           <app-image-upload
             [imageUrl]="form.get('imageUrl')?.value ?? ''"
             (imageUrlChange)="onImageUrlChange($event)"

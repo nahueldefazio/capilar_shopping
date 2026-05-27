@@ -278,6 +278,62 @@
   }
 }
 
+.form-label--optional {
+  font-weight: 400;
+  color: #a08070;
+  font-size: 0.75rem;
+}
+
+// SHIPPING CALC BANNER
+.shipping-calc {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+
+  &--loading {
+    background: #f5f5f5;
+    color: #595959;
+  }
+
+  &--ok {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+  }
+
+  &--warn {
+    background: #fffbeb;
+    color: #92400e;
+    border: 1px solid #fde68a;
+  }
+}
+
+// SUMMARY LINES
+.checkout-summary__line {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: #5c4033;
+  padding: 0.35rem 0;
+  border-top: 1px solid #f0e8e0;
+}
+
+.checkout-summary__shipping-loading {
+  color: #a08070;
+  font-style: italic;
+}
+
+.checkout-summary__shipping-free {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.checkout-summary__shipping-coordinar {
+  color: #b45309;
+  font-style: italic;
+}
+
 .checkout-error {
   background: #fee2e2;
   color: #991b1b;

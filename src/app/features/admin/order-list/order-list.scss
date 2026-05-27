@@ -81,7 +81,7 @@
   padding: 0.3rem 0.65rem;
   font-size: 0.75rem;
   font-weight: 600;
-  background: #16a34a;
+  background: #166534;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -89,7 +89,7 @@
   white-space: nowrap;
   transition: background 0.2s;
 
-  &:hover:not(:disabled) { background: #15803d; }
+  &:hover:not(:disabled) { background: #14532d; }
   &:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 
@@ -136,4 +136,164 @@
   color: #7a6050;
   font-style: italic;
   margin-top: 0.25rem;
+}
+
+.text-muted {
+  color: #c0aea0;
+  font-size: 0.8rem;
+}
+
+.zone-badge {
+  display: inline-block;
+  margin-left: 0.3rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.65rem;
+  font-weight: 700;
+
+  &--CABA     { background: #dbeafe; color: #1e40af; }
+  &--GBA      { background: #e0e7ff; color: #3730a3; }
+  &--INTERIOR { background: #fef3c7; color: #92400e; }
+  &--A_COORDINAR { background: #fee2e2; color: #991b1b; }
+}
+
+.shipping-status {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 600;
+
+  &--pending       { color: #b45309; }
+  &--preparing     { color: #1d4ed8; }
+  &--label_created { color: #6d28d9; }
+  &--shipped       { color: #0369a1; }
+  &--delivered     { color: #16a34a; }
+  &--cancelled     { color: #dc2626; }
+}
+
+.tracking-chip {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.68rem;
+  color: #5c4033;
+  font-family: monospace;
+  background: #f5ede6;
+  padding: 0.15rem 0.35rem;
+  border-radius: 3px;
+}
+
+.btn-tracking {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #1d4ed8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+
+  &:hover { background: #1e40af; }
+}
+
+// TRACKING EDIT PANEL
+.tracking-row td {
+  background: #f0f4ff;
+  padding: 1rem 1.25rem;
+}
+
+.tracking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+
+  &__title {
+    font-size: 0.875rem;
+    color: #1e3a8a;
+  }
+}
+
+.tracking-address {
+  font-size: 0.8rem;
+  color: #5c4033;
+  background: #fff;
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #e0d4c8;
+}
+
+.tracking-fields {
+  display: grid;
+  grid-template-columns: 180px 1fr 1fr;
+  gap: 0.75rem;
+  align-items: end;
+}
+
+.tracking-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.form-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #5c4033;
+}
+
+.form-input {
+  padding: 0.45rem 0.625rem;
+  border: 1px solid #e0d4c8;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  color: #2c1810;
+  outline: none;
+  background: #fff;
+  width: 100%;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: #8b4513;
+    box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.1);
+  }
+}
+
+.tracking-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-save-tracking {
+  padding: 0.4rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: #1d4ed8;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover:not(:disabled) { background: #1e40af; }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
+}
+
+.btn-cancel-tracking {
+  padding: 0.4rem 0.875rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: transparent;
+  color: #5c4033;
+  border: 1px solid #e0d4c8;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover { background: #f5ede6; }
+}
+
+@media (max-width: 900px) {
+  .tracking-fields {
+    grid-template-columns: 1fr;
+  }
 }

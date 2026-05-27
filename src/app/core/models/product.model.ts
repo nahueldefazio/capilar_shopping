@@ -7,6 +7,7 @@ export interface Product {
   description: string;
   price: number;
   stock: number;
+  weightGrams?: number;
   categoryId: string;
   categoryName?: string;
   categorySlug?: string;

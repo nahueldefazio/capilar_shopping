@@ -15,10 +15,13 @@
           <th>N° Pedido</th>
           <th>Cliente</th>
           <th>Tipo</th>
+          <th>Subtotal</th>
+          <th>Envío</th>
           <th>Total</th>
           <th>Método pago</th>
           <th>Estado pago</th>
           <th>Entrega</th>
+          <th>Estado envío</th>
           <th>Estado pedido</th>
           <th>Fecha</th>
           <th>Acciones</th>
@@ -40,6 +43,17 @@
                 {{ order.customer.customerType }}
               </span>
             </td>
+            <td>{{ order.subtotal | currencyAr }}</td>
+            <td>
+              @if (order.deliveryMethod === 'home_delivery') {
+                {{ order.shippingCost | currencyAr }}
+                @if (order.shippingZone) {
+                  <span class="zone-badge zone-badge--{{ order.shippingZone }}">{{ order.shippingZone }}</span>
+                }
+              } @else {
+                <span class="text-muted">—</span>
+              }
+            </td>
             <td><strong>{{ order.total | currencyAr }}</strong></td>
             <td>
               <span class="payment-badge payment-badge--{{ order.paymentMethod }}">
@@ -57,6 +71,18 @@
               <span class="delivery-badge">
                 {{ order.deliveryMethod === 'home_delivery' ? '🚚 Domicilio' : order.deliveryMethod === 'pickup' ? '📦 Retiro' : '💬 WhatsApp' }}
               </span>
+            </td>
+            <td>
+              @if (order.shipping) {
+                <span class="shipping-status shipping-status--{{ order.shipping.status }}">
+                  {{ shippingStatusLabels[order.shipping.status] }}
+                </span>
+                @if (order.shipping.trackingNumber) {
+                  <span class="tracking-chip">{{ order.shipping.trackingNumber }}</span>
+                }
+              } @else {
+                <span class="text-muted">—</span>
+              }
             </td>
             <td>
               <span class="order-status order-status--{{ order.status }}">
@@ -78,12 +104,63 @@
                   {{ confirmingId() === order.id ? '...' : '✓ Confirmar pago' }}
                 </button>
               }
+              @if (order.shipping) {
+                <button class="btn-tracking" (click)="openTrackingEdit(order)">
+                  📦 Tracking
+                </button>
+              }
             </td>
           </tr>
 
+          <!-- TRACKING EDIT PANEL -->
+          @if (trackingEditId() === order.id) {
+            <tr class="tracking-row">
+              <td colspan="13">
+                <form class="tracking-form" [formGroup]="trackingForm" (ngSubmit)="saveTracking(order)">
+                  <strong class="tracking-form__title">Gestión de envío — {{ order.orderNumber }}</strong>
+                  @if (order.shipping) {
+                    <div class="tracking-address">
+                      📍 {{ order.shipping.street }} {{ order.shipping.streetNumber }}{{ order.shipping.apartment ? ', ' + order.shipping.apartment : '' }},
+                      {{ order.shipping.city }}, {{ order.shipping.province }} ({{ order.shipping.postalCode }})
+                    </div>
+                  }
+                  <div class="tracking-fields">
+                    <div class="tracking-field">
+                      <label class="form-label" for="trackingShippingStatus">Estado de envío</label>
+                      <select id="trackingShippingStatus" class="status-select" formControlName="shippingStatus">
+                        @for (s of shippingStatuses; track s) {
+                          <option [value]="s">{{ shippingStatusLabels[s] }}</option>
+                        }
+                      </select>
+                    </div>
+                    <div class="tracking-field">
+                      <label class="form-label" for="trackingNumber">Número de seguimiento</label>
+                      <input id="trackingNumber" class="form-input" type="text" formControlName="trackingNumber"
+                        placeholder="360000000000000" />
+                    </div>
+                    <div class="tracking-field">
+                      <label class="form-label" for="trackingUrl">URL de seguimiento</label>
+                      <input id="trackingUrl" class="form-input" type="text" formControlName="trackingUrl"
+                        placeholder="https://www.andreani.com/?tab=seguir-envio" />
+                    </div>
+                  </div>
+                  <div class="tracking-actions">
+                    <button type="submit" class="btn-save-tracking" [disabled]="savingTrackingId() === order.id">
+                      {{ savingTrackingId() === order.id ? 'Guardando...' : '✓ Guardar' }}
+                    </button>
+                    <button type="button" class="btn-cancel-tracking" (click)="cancelTrackingEdit()">
+                      Cancelar
+                    </button>
+                  </div>
+                </form>
+              </td>
+            </tr>
+          }
+
+          <!-- ITEMS DETAIL -->
           @if (expandedId() === order.id) {
             <tr class="order-items-row">
-              <td colspan="10">
+              <td colspan="13">
                 <div class="order-items">
                   <strong class="order-items__title">Productos del pedido:</strong>
                   <table class="order-items__table">

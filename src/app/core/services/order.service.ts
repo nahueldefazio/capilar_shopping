@@ -2,21 +2,32 @@ import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { CartItem, Customer, Order, OrderStatus, PaymentStatus, PaymentMethod, DeliveryMethod } from '../models';
+import { CartItem, Order, OrderStatus, PaymentStatus, ShippingStatus } from '../models';
 import { environment } from '../../../environments/environment';
 
-export interface CheckoutData {
-  customer: Customer;
-  paymentMethod: PaymentMethod;
-  deliveryMethod: DeliveryMethod;
-  notes: string;
+export interface OrderShippingInput {
+  province: string;
+  city: string;
+  postalCode: string;
+  street: string;
+  streetNumber: string;
+  apartment?: string;
 }
 
-interface CheckoutPayload {
-  customer: Customer;
-  items: { productId: string; quantity: number }[];
-  paymentMethod: PaymentMethod;
-  deliveryMethod: DeliveryMethod;
+export interface CheckoutData {
+  customer: {
+    fullName: string;
+    email: string;
+    phone: string;
+    customerType: string;
+    address?: string;
+    province?: string;
+    city?: string;
+    postalCode?: string;
+  };
+  shipping?: OrderShippingInput;
+  paymentMethod: string;
+  deliveryMethod: string;
   notes: string;
 }
 
@@ -28,8 +39,9 @@ export class OrderService {
   private _orders = signal<Order[]>([]);
 
   createOrder(data: CheckoutData, items: CartItem[]): Observable<Order> {
-    const payload: CheckoutPayload = {
+    const payload = {
       customer: data.customer,
+      shipping: data.shipping,
       items: items.map((i) => ({ productId: i.product.id, quantity: i.quantity })),
       paymentMethod: data.paymentMethod,
       deliveryMethod: data.deliveryMethod,
@@ -58,6 +70,12 @@ export class OrderService {
 
   confirmPayment(id: string, paymentStatus: PaymentStatus): Observable<Order> {
     return this.http.patch<Order>(`${this.base}/orders/${id}/payment-status`, { paymentStatus }).pipe(
+      tap((updated) => this._orders.update((list) => list.map((o) => (o.id === updated.id ? updated : o))))
+    );
+  }
+
+  updateShipping(id: string, dto: { shippingStatus?: ShippingStatus; trackingNumber?: string; trackingUrl?: string }): Observable<Order> {
+    return this.http.patch<Order>(`${this.base}/orders/${id}/shipping`, dto).pipe(
       tap((updated) => this._orders.update((list) => list.map((o) => (o.id === updated.id ? updated : o))))
     );
   }

@@ -33,6 +33,7 @@ export class AdminProductFormComponent implements OnInit {
     description: ['', Validators.required],
     price: [0, [Validators.required, Validators.min(1)]],
     stock: [0, [Validators.required, Validators.min(0)]],
+    weightGrams: [500, [Validators.required, Validators.min(0)]],
     categoryId: ['', Validators.required],
     categoryName: [''],
     saleType: ['retail' as SaleType, Validators.required],
@@ -82,34 +83,25 @@ export class AdminProductFormComponent implements OnInit {
     }
     const v = this.form.value;
 
+    const productData = {
+      name: v.name!,
+      slug: v.slug!,
+      description: v.description!,
+      price: v.price!,
+      stock: v.stock!,
+      weightGrams: v.weightGrams ?? 500,
+      categoryId: v.categoryId!,
+      categoryName: v.categoryName ?? '',
+      saleType: v.saleType as SaleType,
+      imageUrl: v.imageUrl ?? '',
+      isActive: v.isActive ?? true,
+      featured: v.featured ?? false,
+    };
+
     if (this.isEdit() && this.productId()) {
-      this.productService.updateProduct(this.productId()!, {
-        name: v.name!,
-        slug: v.slug!,
-        description: v.description!,
-        price: v.price!,
-        stock: v.stock!,
-        categoryId: v.categoryId!,
-        categoryName: v.categoryName ?? '',
-        saleType: v.saleType as SaleType,
-        imageUrl: v.imageUrl ?? '',
-        isActive: v.isActive ?? true,
-        featured: v.featured ?? false,
-      });
+      this.productService.updateProduct(this.productId()!, productData);
     } else {
-      this.productService.createProduct({
-        name: v.name!,
-        slug: v.slug!,
-        description: v.description!,
-        price: v.price!,
-        stock: v.stock!,
-        categoryId: v.categoryId!,
-        categoryName: v.categoryName ?? '',
-        saleType: v.saleType as SaleType,
-        imageUrl: v.imageUrl ?? '',
-        isActive: v.isActive ?? true,
-        featured: v.featured ?? false,
-      });
+      this.productService.createProduct(productData);
     }
 
     this.saving.set(true);
