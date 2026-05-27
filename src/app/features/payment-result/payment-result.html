@@ -1,0 +1,59 @@
+<div class="payment-result">
+  <div class="container">
+    <div class="payment-result__card">
+
+      @if (status() === 'approved') {
+        <div class="payment-result__icon payment-result__icon--success">✓</div>
+        <h1 class="payment-result__title">¡Pago aprobado!</h1>
+        <p class="payment-result__text">
+          Tu pago fue procesado correctamente. Nos pondremos en contacto para coordinar la entrega.
+        </p>
+        @if (orderNumber()) {
+          <p class="payment-result__ref">Pedido: <strong>{{ orderNumber() }}</strong></p>
+        }
+        <div class="payment-result__actions">
+          <a class="btn btn--primary btn--lg" routerLink="/">Volver al inicio</a>
+          <a class="btn btn--outline btn--lg" routerLink="/productos">Seguir comprando</a>
+        </div>
+      }
+
+      @if (status() === 'pending') {
+        <div class="payment-result__icon payment-result__icon--pending">⏳</div>
+        <h1 class="payment-result__title">Pago pendiente</h1>
+        <p class="payment-result__text">
+          Tu pago está siendo procesado. Te enviaremos un email cuando se confirme.
+        </p>
+        @if (orderNumber()) {
+          <p class="payment-result__ref">Pedido: <strong>{{ orderNumber() }}</strong></p>
+        }
+        <div class="payment-result__actions">
+          <a class="btn btn--primary btn--lg" routerLink="/">Volver al inicio</a>
+        </div>
+      }
+
+      @if (status() === 'rejected') {
+        <div class="payment-result__icon payment-result__icon--error">✕</div>
+        <h1 class="payment-result__title">Pago rechazado</h1>
+        <p class="payment-result__text">
+          El pago no pudo procesarse. Podés intentarlo de nuevo o elegir otro método de pago.
+        </p>
+        <div class="payment-result__actions">
+          <a class="btn btn--primary btn--lg" routerLink="/checkout">Reintentar</a>
+          <a class="btn btn--outline btn--lg" routerLink="/carrito">Ver carrito</a>
+        </div>
+      }
+
+      @if (status() === 'unknown') {
+        <div class="payment-result__icon payment-result__icon--pending">?</div>
+        <h1 class="payment-result__title">Estado desconocido</h1>
+        <p class="payment-result__text">
+          No pudimos determinar el estado de tu pago. Si realizaste el pago, te contactaremos en breve.
+        </p>
+        <div class="payment-result__actions">
+          <a class="btn btn--primary btn--lg" routerLink="/">Volver al inicio</a>
+        </div>
+      }
+
+    </div>
+  </div>
+</div>

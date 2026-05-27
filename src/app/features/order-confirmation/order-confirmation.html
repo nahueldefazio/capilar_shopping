@@ -41,8 +41,8 @@
         <div class="confirmation-card__next-steps">
           <h3>¿Qué sigue?</h3>
           <ul>
-            @if (order()!.paymentMethod === 'mercado_pago') {
-              <li>Te enviaremos el link de pago de Mercado Pago a tu email.</li>
+            @if (order()!.paymentMethod === 'mercadopago') {
+              <li>El pago fue procesado a través de Mercado Pago.</li>
             } @else {
               <li>Te enviaremos los datos para la transferencia bancaria.</li>
             }

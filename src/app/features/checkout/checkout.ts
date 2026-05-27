@@ -34,7 +34,7 @@ export class CheckoutComponent {
     city: ['', Validators.required],
     postalCode: ['', Validators.required],
     deliveryMethod: ['home_delivery' as DeliveryMethod, Validators.required],
-    paymentMethod: ['mercado_pago' as PaymentMethod, Validators.required],
+    paymentMethod: ['mercadopago' as PaymentMethod, Validators.required],
     notes: [''],
   });
 
@@ -82,10 +82,25 @@ export class CheckoutComponent {
       this.cartStore.items()
     ).subscribe({
       next: (order) => {
-        this.submitting.set(false);
-        this.router.navigate(['/confirmacion', order.id], { state: { order } }).then(() => {
-          this.cartStore.clearCart();
-        });
+        if (v.paymentMethod === 'mercadopago') {
+          // Crear preferencia y redirigir a Mercado Pago
+          this.orderService.createMercadoPagoPreference(Number(order.id)).subscribe({
+            next: ({ initPoint }) => {
+              this.submitting.set(false);
+              this.cartStore.clearCart();
+              window.location.href = initPoint;
+            },
+            error: () => {
+              this.submitting.set(false);
+              this.errorMsg.set('No se pudo iniciar el pago. Intentá de nuevo.');
+            },
+          });
+        } else {
+          this.submitting.set(false);
+          this.router.navigate(['/confirmacion', order.id], { state: { order } }).then(() => {
+            this.cartStore.clearCart();
+          });
+        }
       },
       error: () => {
         this.submitting.set(false);

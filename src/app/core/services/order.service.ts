@@ -61,4 +61,11 @@ export class OrderService {
       tap((updated) => this._orders.update((list) => list.map((o) => (o.id === updated.id ? updated : o))))
     );
   }
+
+  createMercadoPagoPreference(orderId: number): Observable<{ preferenceId: string; initPoint: string }> {
+    return this.http.post<{ preferenceId: string; initPoint: string }>(
+      `${this.base}/payments/mercadopago/create-preference`,
+      { orderId },
+    );
+  }
 }

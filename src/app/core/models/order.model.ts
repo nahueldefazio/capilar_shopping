@@ -11,7 +11,7 @@ export type OrderStatus =
   | 'cancelled';
 
 export type PaymentStatus = 'pending' | 'approved' | 'rejected' | 'refunded';
-export type PaymentMethod = 'mercado_pago' | 'transfer';
+export type PaymentMethod = 'mercadopago' | 'transfer';
 export type DeliveryMethod = 'pickup' | 'home_delivery' | 'whatsapp';
 
 export interface OrderItem {
