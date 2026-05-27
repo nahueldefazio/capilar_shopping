@@ -1,13 +1,4 @@
-@if (redirectingToMP()) {
-  <div class="mp-redirect-overlay">
-    <div class="mp-redirect-card">
-      <img class="mp-redirect-logo" src="mercadopago-logo.svg" alt="Mercado Pago" />
-      <span class="mp-spinner"></span>
-      <p class="mp-redirect-text">Redirigiendo al checkout seguro<br>de Mercado Pago...</p>
-      <p class="mp-redirect-sub">No cerrés esta ventana</p>
-    </div>
-  </div>
-} @else if (cartStore_.items().length === 0 && !submitting()) {
+@if (cartStore_.items().length === 0) {
   <div class="container empty-checkout">
     <span>🛒</span>
     <h2>Tu carrito está vacío</h2>
@@ -98,7 +89,7 @@
                 <input type="radio" formControlName="deliveryMethod" value="pickup" />
                 <span class="radio-option__label">
                   <span class="radio-option__title">📦 Retiro a coordinar</span>
-                  <span class="radio-option__desc">Sin costo de envío — punto de encuentro a convenir</span>
+                  <span class="radio-option__desc">Punto de encuentro a convenir — costo según peso y zona</span>
                 </span>
               </label>
               <label class="radio-option">
@@ -243,16 +234,8 @@
             <div class="checkout-error">⚠️ {{ errorMsg() }}</div>
           }
 
-          <button type="submit" class="btn btn--primary btn--lg checkout-submit"
-            [disabled]="submitting()">
-            @if (submitting()) {
-              <span class="checkout-submit__loading">
-                <span class="btn-spinner"></span>
-                Procesando pedido...
-              </span>
-            } @else {
-              Confirmar pedido →
-            }
+          <button type="submit" class="btn btn--primary btn--lg checkout-submit">
+            Revisar pedido →
           </button>
         </form>
 

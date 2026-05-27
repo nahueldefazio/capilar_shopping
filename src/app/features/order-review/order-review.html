@@ -1,0 +1,152 @@
+@if (redirectingToMP()) {
+  <div class="mp-redirect-overlay">
+    <div class="mp-redirect-card">
+      <img class="mp-redirect-logo" src="mercadopago-logo.svg" alt="Mercado Pago" />
+      <span class="mp-spinner"></span>
+      <p class="mp-redirect-text">Redirigiendo al checkout seguro<br>de Mercado Pago...</p>
+      <p class="mp-redirect-sub">No cerrés esta ventana</p>
+    </div>
+  </div>
+} @else if (state) {
+  <div class="review-page">
+    <div class="container">
+      <button class="review-back" (click)="goBack()">← Volver a editar</button>
+      <h1 class="review-page__title">Revisá tu pedido</h1>
+
+      <div class="review-layout">
+
+        <!-- LEFT: details -->
+        <div class="review-left">
+
+          <!-- Items -->
+          <section class="review-section">
+            <h2 class="review-section__title">Productos</h2>
+            <div class="review-items">
+              @for (item of cartStore_.items(); track item.product.id) {
+                <div class="review-item">
+                  <img [src]="item.product.imageUrl" [alt]="item.product.name" />
+                  <div class="review-item__info">
+                    <p class="review-item__name">{{ item.product.name }}</p>
+                    <span class="review-item__qty">x{{ item.quantity }}</span>
+                  </div>
+                  <span class="review-item__price">{{ item.subtotal | currencyAr }}</span>
+                </div>
+              }
+            </div>
+          </section>
+
+          <!-- Contact -->
+          <section class="review-section">
+            <h2 class="review-section__title">Datos de contacto</h2>
+            <div class="review-details">
+              <div class="review-detail">
+                <span class="review-detail__label">Nombre</span>
+                <span class="review-detail__value">{{ state.fullName }}</span>
+              </div>
+              <div class="review-detail">
+                <span class="review-detail__label">Email</span>
+                <span class="review-detail__value">{{ state.email }}</span>
+              </div>
+              <div class="review-detail">
+                <span class="review-detail__label">Teléfono</span>
+                <span class="review-detail__value">{{ state.phone }}</span>
+              </div>
+              <div class="review-detail">
+                <span class="review-detail__label">Tipo</span>
+                <span class="review-detail__value">{{ customerTypeLabels[state.customerType] }}</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- Delivery -->
+          <section class="review-section">
+            <h2 class="review-section__title">Entrega</h2>
+            <div class="review-details">
+              <div class="review-detail">
+                <span class="review-detail__label">Método</span>
+                <span class="review-detail__value">{{ deliveryLabels[state.deliveryMethod] }}</span>
+              </div>
+              @if (state.deliveryMethod === 'home_delivery') {
+                <div class="review-detail">
+                  <span class="review-detail__label">Dirección</span>
+                  <span class="review-detail__value">{{ addressLine }}</span>
+                </div>
+              }
+            </div>
+          </section>
+
+          <!-- Payment -->
+          <section class="review-section">
+            <h2 class="review-section__title">Método de pago</h2>
+            <div class="review-details">
+              <div class="review-detail">
+                <span class="review-detail__label">Pago</span>
+                <span class="review-detail__value">{{ paymentLabels[state.paymentMethod] }}</span>
+              </div>
+            </div>
+          </section>
+
+          @if (state.notes) {
+            <section class="review-section">
+              <h2 class="review-section__title">Observaciones</h2>
+              <p class="review-notes">{{ state.notes }}</p>
+            </section>
+          }
+        </div>
+
+        <!-- RIGHT: totals + confirm -->
+        <aside class="review-summary">
+          <div class="review-summary__card">
+            <h3 class="review-summary__title">Total del pedido</h3>
+
+            <div class="review-summary__line">
+              <span>Subtotal</span>
+              <span>{{ cartStore_.total() | currencyAr }}</span>
+            </div>
+
+            <div class="review-summary__line">
+              <span>Envío</span>
+              @if (shippingMessage) {
+                <span class="review-summary__ship-coord">{{ shippingMessage }}</span>
+              } @else if (shippingCost > 0) {
+                <span>{{ shippingCost | currencyAr }}</span>
+              } @else {
+                <span class="review-summary__ship-coord">a coordinar</span>
+              }
+            </div>
+
+            <div class="review-summary__total">
+              <span>Total</span>
+              <span>{{ grandTotal | currencyAr }}</span>
+            </div>
+
+            @if (shippingMessage && state.deliveryMethod === 'home_delivery') {
+              <div class="review-summary__warn">
+                ⚠️ {{ shippingMessage }}. Te vamos a contactar para coordinar la entrega.
+              </div>
+            }
+
+            @if (errorMsg()) {
+              <div class="review-error">⚠️ {{ errorMsg() }}</div>
+            }
+
+            <button class="btn btn--primary btn--lg review-confirm"
+              (click)="onConfirm()" [disabled]="submitting()">
+              @if (submitting()) {
+                <span class="review-confirm__loading">
+                  <span class="btn-spinner"></span>
+                  Procesando...
+                </span>
+              } @else if (state.paymentMethod === 'mercadopago') {
+                Pagar con Mercado Pago →
+              } @else {
+                Confirmar pedido →
+              }
+            </button>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </div>
+}

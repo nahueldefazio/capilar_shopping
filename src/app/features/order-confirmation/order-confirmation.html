@@ -44,12 +44,35 @@
             @if (order()!.paymentMethod === 'mercadopago') {
               <li>El pago fue procesado a través de Mercado Pago.</li>
             } @else {
-              <li>Te enviaremos los datos para la transferencia bancaria.</li>
+              <li>Realizá la transferencia con los datos que aparecen abajo.</li>
             }
             <li>Una vez confirmado el pago, preparamos tu pedido.</li>
             <li>Te avisamos cuando tu pedido esté listo para enviar o retirar.</li>
           </ul>
         </div>
+
+        @if (order()!.paymentMethod === 'transfer') {
+          <div class="transfer-details">
+            <h3 class="transfer-details__title">🏦 Datos para la transferencia</h3>
+            <div class="transfer-details__row">
+              <span class="transfer-details__label">Titular</span>
+              <span class="transfer-details__value">Nahuel de Fazio</span>
+            </div>
+            <div class="transfer-details__row">
+              <span class="transfer-details__label">CUIT/CUIL</span>
+              <span class="transfer-details__value">20-39185800-5</span>
+            </div>
+            <div class="transfer-details__row">
+              <span class="transfer-details__label">CVU</span>
+              <span class="transfer-details__value transfer-details__value--mono">0000003100078452726210</span>
+            </div>
+            <div class="transfer-details__row">
+              <span class="transfer-details__label">Alias</span>
+              <span class="transfer-details__value transfer-details__value--mono">nahuel.defazio</span>
+            </div>
+            <p class="transfer-details__note">Una vez realizada la transferencia, envianos el comprobante por WhatsApp.</p>
+          </div>
+        }
 
         <div class="confirmation-card__actions">
           <button class="btn btn--whatsapp btn--lg" (click)="sendWhatsApp()">

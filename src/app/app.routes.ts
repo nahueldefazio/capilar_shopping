@@ -35,6 +35,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/checkout/checkout').then((m) => m.CheckoutComponent),
   },
   {
+    path: 'revisar-pedido',
+    loadComponent: () => import('./features/order-review/order-review').then((m) => m.OrderReviewComponent),
+  },
+  {
     path: 'pago-resultado',
     loadComponent: () =>
       import('./features/payment-result/payment-result').then((m) => m.PaymentResultComponent),

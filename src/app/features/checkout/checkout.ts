@@ -3,7 +3,6 @@ import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Subject, debounceTime, takeUntil, distinctUntilChanged, combineLatest } from 'rxjs';
 import { CartStore } from '../../core/services/cart.store';
-import { OrderService } from '../../core/services/order.service';
 import { ShippingService } from '../../core/services/shipping.service';
 import { Customer, ShippingCalculationResult } from '../../core/models';
 import { CurrencyArPipe } from '../../shared/pipes/currency-ar.pipe';
@@ -18,7 +17,6 @@ import { CurrencyArPipe } from '../../shared/pipes/currency-ar.pipe';
 export class CheckoutComponent implements OnDestroy {
   private fb = inject(FormBuilder);
   private cartStore = inject(CartStore);
-  private orderService = inject(OrderService);
   private shippingService = inject(ShippingService);
   private router = inject(Router);
   private el = inject(ElementRef);
@@ -26,7 +24,6 @@ export class CheckoutComponent implements OnDestroy {
 
   cartStore_ = this.cartStore;
   submitting = signal(false);
-  redirectingToMP = signal(false);
   errorMsg = signal('');
   calculatingShipping = signal(false);
   shippingResult = signal<ShippingCalculationResult | null>(null);
@@ -72,7 +69,7 @@ export class CheckoutComponent implements OnDestroy {
   get shippingDisplay(): { cost: number | null; message: string | null } {
     const method = this.form.get('deliveryMethod')?.value;
     if (method === 'pickup' || method === 'coordinate_by_whatsapp') {
-      return { cost: 0, message: null };
+      return { cost: null, message: 'a coordinar' };
     }
     const r = this.shippingResult();
     if (!r) return { cost: null, message: null };
@@ -135,72 +132,22 @@ export class CheckoutComponent implements OnDestroy {
     if (this.cartStore.items().length === 0) return;
 
     const v = this.form.value;
-    const isHomeDelivery = v.deliveryMethod === 'home_delivery';
-
-    if (isHomeDelivery && this.shippingResult()?.message) {
-      this.errorMsg.set('El envío supera los 5 kg. Coordiná la entrega por WhatsApp.');
-      return;
-    }
-
-    this.submitting.set(true);
-    this.errorMsg.set('');
-
-    const address = isHomeDelivery
-      ? `${v.street} ${v.streetNumber}${v.apartment ? ', ' + v.apartment : ''}`
-      : undefined;
-
-    this.orderService.createOrder(
-      {
-        customer: {
-          fullName: v.fullName!,
-          email: v.email!,
-          phone: v.phone!,
-          customerType: v.customerType as Customer['customerType'],
-          address,
-          province: v.province!,
-          city: v.city!,
-          postalCode: v.postalCode!,
-        },
-        shipping: isHomeDelivery
-          ? {
-              province: v.province!,
-              city: v.city!,
-              postalCode: v.postalCode!,
-              street: v.street!,
-              streetNumber: v.streetNumber!,
-              apartment: v.apartment ?? undefined,
-            }
-          : undefined,
-        paymentMethod: v.paymentMethod!,
-        deliveryMethod: v.deliveryMethod!,
+    this.router.navigate(['/revisar-pedido'], {
+      state: {
+        fullName: v.fullName,
+        email: v.email,
+        phone: v.phone,
+        customerType: v.customerType,
+        province: v.province ?? '',
+        city: v.city ?? '',
+        postalCode: v.postalCode ?? '',
+        street: v.street ?? '',
+        streetNumber: v.streetNumber ?? '',
+        apartment: v.apartment ?? '',
+        deliveryMethod: v.deliveryMethod,
+        paymentMethod: v.paymentMethod,
         notes: v.notes ?? '',
-      },
-      this.cartStore.items()
-    ).subscribe({
-      next: (order) => {
-        if (v.paymentMethod === 'mercadopago') {
-          this.orderService.createMercadoPagoPreference(Number(order.id)).subscribe({
-            next: ({ initPoint }) => {
-              this.submitting.set(false);
-              this.redirectingToMP.set(true);
-              this.cartStore.clearCart();
-              window.location.href = initPoint;
-            },
-            error: () => {
-              this.submitting.set(false);
-              this.errorMsg.set('No se pudo iniciar el pago. Intentá de nuevo.');
-            },
-          });
-        } else {
-          this.submitting.set(false);
-          this.router.navigate(['/confirmacion', order.id], { state: { order } }).then(() => {
-            this.cartStore.clearCart();
-          });
-        }
-      },
-      error: () => {
-        this.submitting.set(false);
-        this.errorMsg.set('Hubo un error al procesar tu pedido. Intentá de nuevo.');
+        shippingResult: this.shippingResult(),
       },
     });
   }
