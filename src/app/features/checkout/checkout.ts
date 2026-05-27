@@ -26,6 +26,7 @@ export class CheckoutComponent implements OnDestroy {
 
   cartStore_ = this.cartStore;
   submitting = signal(false);
+  redirectingToMP = signal(false);
   errorMsg = signal('');
   calculatingShipping = signal(false);
   shippingResult = signal<ShippingCalculationResult | null>(null);
@@ -181,6 +182,7 @@ export class CheckoutComponent implements OnDestroy {
           this.orderService.createMercadoPagoPreference(Number(order.id)).subscribe({
             next: ({ initPoint }) => {
               this.submitting.set(false);
+              this.redirectingToMP.set(true);
               this.cartStore.clearCart();
               window.location.href = initPoint;
             },
