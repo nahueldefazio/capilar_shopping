@@ -44,7 +44,7 @@ export class OrderReviewComponent implements OnInit {
 
   readonly deliveryLabels: Record<string, string> = {
     home_delivery: '🚚 Envío a domicilio (Andreani)',
-    pickup: '📦 Retiro a coordinar',
+    pickup: '📦 Retiro en sucursal Andreani',
     coordinate_by_whatsapp: '💬 Coordinar por WhatsApp',
   };
 
@@ -72,10 +72,10 @@ export class OrderReviewComponent implements OnInit {
   get shippingDisplay(): { cost: number | null; label: string | null; warn: string | null } {
     const s = this.state;
     if (!s) return { cost: null, label: '—', warn: null };
-    if (s.deliveryMethod === 'pickup' || s.deliveryMethod === 'coordinate_by_whatsapp') {
+    if (s.deliveryMethod === 'coordinate_by_whatsapp') {
       return { cost: null, label: 'a coordinar', warn: null };
     }
-    if (s.deliveryMethod === 'home_delivery') {
+    if (s.deliveryMethod === 'home_delivery' || s.deliveryMethod === 'pickup') {
       if (!s.shippingResult) return { cost: null, label: '—', warn: null };
       if (s.shippingResult.message) return { cost: null, label: 'a coordinar', warn: s.shippingResult.message };
       return { cost: s.shippingResult.shippingCost, label: null, warn: null };

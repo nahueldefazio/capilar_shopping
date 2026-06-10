@@ -96,9 +96,14 @@ export class CheckoutComponent implements OnDestroy {
     return this.form.get('deliveryMethod')?.value === 'home_delivery';
   }
 
+  get showZoneSelector(): boolean {
+    const method = this.form.get('deliveryMethod')?.value;
+    return method === 'home_delivery' || method === 'pickup';
+  }
+
   get shippingDisplay(): { cost: number | null; message: string | null } {
     const method = this.form.get('deliveryMethod')?.value;
-    if (method === 'pickup' || method === 'coordinate_by_whatsapp') {
+    if (method === 'coordinate_by_whatsapp') {
       return { cost: null, message: 'a coordinar' };
     }
     const r = this.shippingResult();
@@ -114,21 +119,19 @@ export class CheckoutComponent implements OnDestroy {
 
   private recalculateShipping(): void {
     const method = this.form.get('deliveryMethod')?.value;
-    if (method !== 'home_delivery') {
+    if (method !== 'home_delivery' && method !== 'pickup') {
       this.shippingResult.set(null);
       return;
     }
     const province = this.form.get('province')?.value;
     const city = this.form.get('city')?.value;
-    const postalCode = this.form.get('postalCode')?.value;
-    if (!province || !city || !postalCode) return;
+    if (!province || !city) return;
 
     this.calculatingShipping.set(true);
     this.shippingService
       .calculate({
         province,
         city,
-        postalCode,
         items: this.cartStore.items().map((i) => ({
           productId: i.product.id,
           quantity: i.quantity,
@@ -145,7 +148,9 @@ export class CheckoutComponent implements OnDestroy {
   }
 
   private syncAddressValidators(method: string | null): void {
-    const needsAddress = method === 'home_delivery';
+    const isHomeDelivery = method === 'home_delivery';
+    const needsZone = isHomeDelivery || method === 'pickup';
+
     const validatorsByField = {
       province: [Validators.required],
       city: [
@@ -172,10 +177,13 @@ export class CheckoutComponent implements OnDestroy {
       ],
     };
 
+    const zoneOnlyFields = new Set(['province', 'city']);
+
     for (const [field, validators] of Object.entries(validatorsByField)) {
       const control = this.form.get(field);
       if (!control) continue;
-      control.setValidators(needsAddress ? validators : []);
+      const active = zoneOnlyFields.has(field) ? needsZone : isHomeDelivery;
+      control.setValidators(active ? validators : []);
       control.updateValueAndValidity({ emitEvent: false });
     }
   }

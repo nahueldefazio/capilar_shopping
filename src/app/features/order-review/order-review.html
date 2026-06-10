@@ -71,6 +71,11 @@
                   <span class="review-detail__label">Dirección</span>
                   <span class="review-detail__value">{{ addressLine }}</span>
                 </div>
+              } @else if (state.deliveryMethod === 'pickup') {
+                <div class="review-detail">
+                  <span class="review-detail__label">Zona</span>
+                  <span class="review-detail__value">{{ state.city }}, {{ state.province }}</span>
+                </div>
               }
             </div>
           </section>

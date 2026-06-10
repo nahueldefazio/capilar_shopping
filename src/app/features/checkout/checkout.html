@@ -91,8 +91,8 @@
               <label class="radio-option">
                 <input type="radio" formControlName="deliveryMethod" value="pickup" />
                 <span class="radio-option__label">
-                  <span class="radio-option__title">📦 Retiro a coordinar</span>
-                  <span class="radio-option__desc">Punto de encuentro a convenir — costo según peso y zona</span>
+                  <span class="radio-option__title">📦 Retiro en sucursal Andreani</span>
+                  <span class="radio-option__desc">Retirás en una sucursal Andreani — costo fijo según zona</span>
                 </span>
               </label>
               <label class="radio-option">
@@ -105,10 +105,10 @@
             </div>
           </section>
 
-          <!-- Dirección (solo para envío a domicilio) -->
-          @if (showAddress) {
+          <!-- Dirección / Zona de envío -->
+          @if (showZoneSelector) {
             <section class="checkout-section">
-              <h2 class="checkout-section__title">Dirección de envío</h2>
+              <h2 class="checkout-section__title">{{ showAddress ? 'Dirección de envío' : 'Zona de retiro' }}</h2>
 
               <div class="form-grid">
                 <div class="form-field">
@@ -155,44 +155,46 @@
                   }
                 </div>
 
-                <div class="form-field">
-                  <label class="form-label" for="postalCode">Código postal *</label>
-                  <input id="postalCode" class="form-input" [class.form-input--error]="isFieldInvalid('postalCode')"
-                    type="text" formControlName="postalCode" placeholder="1043"
-                    autocomplete="postal-code" inputmode="text" maxlength="8" />
-                  @if (isFieldInvalid('postalCode')) {
-                    <span class="form-error">{{ getFieldError('postalCode') }}</span>
-                  }
-                </div>
+                @if (showAddress) {
+                  <div class="form-field">
+                    <label class="form-label" for="postalCode">Código postal *</label>
+                    <input id="postalCode" class="form-input" [class.form-input--error]="isFieldInvalid('postalCode')"
+                      type="text" formControlName="postalCode" placeholder="1043"
+                      autocomplete="postal-code" inputmode="text" maxlength="8" />
+                    @if (isFieldInvalid('postalCode')) {
+                      <span class="form-error">{{ getFieldError('postalCode') }}</span>
+                    }
+                  </div>
 
-                <div class="form-field">
-                  <label class="form-label" for="street">Calle *</label>
-                  <input id="street" class="form-input" [class.form-input--error]="isFieldInvalid('street')"
-                    type="text" formControlName="street" placeholder="Av. Corrientes"
-                    autocomplete="address-line1" maxlength="100" />
-                  @if (isFieldInvalid('street')) {
-                    <span class="form-error">{{ getFieldError('street') }}</span>
-                  }
-                </div>
+                  <div class="form-field">
+                    <label class="form-label" for="street">Calle *</label>
+                    <input id="street" class="form-input" [class.form-input--error]="isFieldInvalid('street')"
+                      type="text" formControlName="street" placeholder="Av. Corrientes"
+                      autocomplete="address-line1" maxlength="100" />
+                    @if (isFieldInvalid('street')) {
+                      <span class="form-error">{{ getFieldError('street') }}</span>
+                    }
+                  </div>
 
-                <div class="form-field">
-                  <label class="form-label" for="streetNumber">Número *</label>
-                  <input id="streetNumber" class="form-input" [class.form-input--error]="isFieldInvalid('streetNumber')"
-                    type="text" formControlName="streetNumber" placeholder="1234"
-                    autocomplete="address-line2" inputmode="numeric" maxlength="7" />
-                  @if (isFieldInvalid('streetNumber')) {
-                    <span class="form-error">{{ getFieldError('streetNumber') }}</span>
-                  }
-                </div>
+                  <div class="form-field">
+                    <label class="form-label" for="streetNumber">Número *</label>
+                    <input id="streetNumber" class="form-input" [class.form-input--error]="isFieldInvalid('streetNumber')"
+                      type="text" formControlName="streetNumber" placeholder="1234"
+                      autocomplete="address-line2" inputmode="numeric" maxlength="7" />
+                    @if (isFieldInvalid('streetNumber')) {
+                      <span class="form-error">{{ getFieldError('streetNumber') }}</span>
+                    }
+                  </div>
 
-                <div class="form-field">
-                  <label class="form-label" for="apartment">Piso / Depto <span class="form-label--optional">(opcional)</span></label>
-                  <input id="apartment" class="form-input" [class.form-input--error]="isFieldInvalid('apartment')"
-                    type="text" formControlName="apartment" placeholder="2° B" maxlength="30" />
-                  @if (isFieldInvalid('apartment')) {
-                    <span class="form-error">{{ getFieldError('apartment') }}</span>
-                  }
-                </div>
+                  <div class="form-field">
+                    <label class="form-label" for="apartment">Piso / Depto <span class="form-label--optional">(opcional)</span></label>
+                    <input id="apartment" class="form-input" [class.form-input--error]="isFieldInvalid('apartment')"
+                      type="text" formControlName="apartment" placeholder="2° B" maxlength="30" />
+                    @if (isFieldInvalid('apartment')) {
+                      <span class="form-error">{{ getFieldError('apartment') }}</span>
+                    }
+                  </div>
+                }
               </div>
 
               <!-- Resultado del cálculo de envío -->
@@ -206,7 +208,7 @@
                 </div>
               } @else if (shippingDisplay.cost !== null && shippingResult()) {
                 <div class="shipping-calc shipping-calc--ok">
-                  ✅ Envío a <strong>{{ shippingResult()!.zone }}</strong>:
+                  ✅ Zona <strong>{{ shippingResult()!.zone }}</strong>:
                   <strong>{{ shippingDisplay.cost | currencyAr }}</strong>
                 </div>
               }

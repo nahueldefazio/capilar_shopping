@@ -7,7 +7,7 @@ import { environment } from '../../../environments/environment';
 export interface CalculateShippingPayload {
   province: string;
   city: string;
-  postalCode: string;
+  postalCode?: string;
   items: { productId: string; quantity: number }[];
   deliveryMethod?: string;
 }
