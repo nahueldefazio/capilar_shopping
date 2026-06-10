@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { ProductService } from '../../core/services/product.service';
 import { CategoryService } from '../../core/services/category.service';
-import { SaleType } from '../../core/models';
+import { Category, SaleType } from '../../core/models';
 import { ProductCardComponent } from '../../shared/components/product-card/product-card';
 import { LoadingComponent } from '../../shared/components/loading/loading';
 
@@ -30,19 +30,6 @@ export class ProductsComponent implements OnInit {
 
   categories = this.categoryService.categories;
   mainCategories = computed(() => this.categories().filter((category) => !category.parentId));
-  subcategories = computed(() => {
-    const categories = this.categories();
-    const selectedSaleType = this.selectedSaleType();
-    const selectedParent = this.mainCategories().find(
-      (category) => MAIN_CATEGORY_TO_SALE_TYPE[category.slug] === selectedSaleType
-    );
-
-    return categories.filter((category) => {
-      if (!category.parentId) return false;
-      if (selectedSaleType === 'all') return true;
-      return category.parentId === selectedParent?.id;
-    });
-  });
   searchQuery = signal('');
   selectedCategory = signal('todos');
   selectedSaleType = signal<FilterSaleType>('all');
@@ -71,7 +58,10 @@ export class ProductsComponent implements OnInit {
     this.categoryService.load();
 
     this.route.queryParams.subscribe((params) => {
-      if (params['categoria']) this.selectedCategory.set(params['categoria']);
+      if (params['categoria']) {
+        this.selectedCategory.set(params['categoria']);
+        if (params['categoria'] === 'plasma') this.selectedSaleType.set('retail');
+      }
       if (params['tipo']) this.selectedSaleType.set(params['tipo'] as FilterSaleType);
     });
   }
@@ -95,6 +85,15 @@ export class ProductsComponent implements OnInit {
 
   saleTypeForMainCategory(slug: string): FilterSaleType {
     return MAIN_CATEGORY_TO_SALE_TYPE[slug] ?? 'all';
+  }
+
+  childCategories(parentId: string): Category[] {
+    return this.categories().filter((category) => category.parentId === parentId);
+  }
+
+  isMainCategoryExpanded(slug: string): boolean {
+    const saleType = this.saleTypeForMainCategory(slug);
+    return this.selectedSaleType() === saleType;
   }
 
   onSortChange(value: string): void {

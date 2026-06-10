@@ -44,36 +44,23 @@
             @for (cat of mainCategories(); track cat.id) {
               <button
                 class="filters__option"
-                [class.filters__option--active]="selectedSaleType() !== 'all' && selectedSaleType() === saleTypeForMainCategory(cat.slug)"
+                [class.filters__option--active]="selectedSaleType() !== 'all' && selectedSaleType() === saleTypeForMainCategory(cat.slug) && selectedCategory() === 'todos'"
                 (click)="selectMainCategory(cat.slug)">
                 {{ cat.name }}
               </button>
+              @if (isMainCategoryExpanded(cat.slug)) {
+                @for (child of childCategories(cat.id); track child.id) {
+                  <button
+                    class="filters__option filters__option--child"
+                    [class.filters__option--active]="selectedCategory() === child.slug"
+                    (click)="selectCategory(child.slug)">
+                    {{ child.name }}
+                  </button>
+                }
+              }
             }
           </div>
         </div>
-
-        <!-- Subcategoría -->
-        @if (subcategories().length > 0) {
-          <div class="filters__group">
-            <label class="filters__label">Subcategoría</label>
-            <div class="filters__options">
-              <button
-                class="filters__option"
-                [class.filters__option--active]="selectedCategory() === 'todos'"
-                (click)="selectCategory('todos')">
-                Todas
-              </button>
-              @for (cat of subcategories(); track cat.id) {
-                <button
-                  class="filters__option filters__option--child"
-                  [class.filters__option--active]="selectedCategory() === cat.slug"
-                  (click)="selectCategory(cat.slug)">
-                  {{ cat.name }}
-                </button>
-              }
-            </div>
-          </div>
-        }
 
         <!-- Orden -->
         <div class="filters__group">
