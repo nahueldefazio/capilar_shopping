@@ -21,27 +21,30 @@
               <div class="form-field form-field--full">
                 <label class="form-label" for="fullName">Nombre completo *</label>
                 <input id="fullName" class="form-input" [class.form-input--error]="isFieldInvalid('fullName')"
-                  type="text" formControlName="fullName" placeholder="María González" />
+                  type="text" formControlName="fullName" placeholder="María González"
+                  autocomplete="name" maxlength="80" />
                 @if (isFieldInvalid('fullName')) {
-                  <span class="form-error">El nombre es obligatorio</span>
+                  <span class="form-error">{{ getFieldError('fullName') }}</span>
                 }
               </div>
 
               <div class="form-field">
                 <label class="form-label" for="email">Email *</label>
                 <input id="email" class="form-input" [class.form-input--error]="isFieldInvalid('email')"
-                  type="email" formControlName="email" placeholder="tu@email.com" />
+                  type="email" formControlName="email" placeholder="tu@email.com"
+                  autocomplete="email" maxlength="120" />
                 @if (isFieldInvalid('email')) {
-                  <span class="form-error">Ingresá un email válido</span>
+                  <span class="form-error">{{ getFieldError('email') }}</span>
                 }
               </div>
 
               <div class="form-field">
                 <label class="form-label" for="phone">Teléfono *</label>
                 <input id="phone" class="form-input" [class.form-input--error]="isFieldInvalid('phone')"
-                  type="tel" formControlName="phone" placeholder="1123456789" />
+                  type="tel" formControlName="phone" placeholder="1123456789"
+                  autocomplete="tel" inputmode="tel" maxlength="22" />
                 @if (isFieldInvalid('phone')) {
-                  <span class="form-error">Ingresá un teléfono válido</span>
+                  <span class="form-error">{{ getFieldError('phone') }}</span>
                 }
               </div>
 
@@ -110,7 +113,7 @@
               <div class="form-grid">
                 <div class="form-field">
                   <label class="form-label" for="province">Provincia *</label>
-                  <select id="province" class="form-input form-select" formControlName="province">
+                  <select id="province" class="form-input form-select" [class.form-input--error]="isFieldInvalid('province')" formControlName="province">
                     <option value="">Seleccioná una provincia</option>
                     <option>Ciudad Autónoma de Buenos Aires</option>
                     <option>Buenos Aires</option>
@@ -138,49 +141,57 @@
                     <option>Tierra del Fuego</option>
                   </select>
                   @if (isFieldInvalid('province')) {
-                    <span class="form-error">Seleccioná una provincia</span>
+                    <span class="form-error">{{ getFieldError('province') }}</span>
                   }
                 </div>
 
                 <div class="form-field">
                   <label class="form-label" for="city">Localidad *</label>
                   <input id="city" class="form-input" [class.form-input--error]="isFieldInvalid('city')"
-                    type="text" formControlName="city" placeholder="Palermo" />
+                    type="text" formControlName="city" placeholder="Palermo"
+                    autocomplete="address-level2" maxlength="80" />
                   @if (isFieldInvalid('city')) {
-                    <span class="form-error">La localidad es obligatoria</span>
+                    <span class="form-error">{{ getFieldError('city') }}</span>
                   }
                 </div>
 
                 <div class="form-field">
                   <label class="form-label" for="postalCode">Código postal *</label>
                   <input id="postalCode" class="form-input" [class.form-input--error]="isFieldInvalid('postalCode')"
-                    type="text" formControlName="postalCode" placeholder="1043" />
+                    type="text" formControlName="postalCode" placeholder="1043"
+                    autocomplete="postal-code" inputmode="text" maxlength="8" />
                   @if (isFieldInvalid('postalCode')) {
-                    <span class="form-error">El código postal es obligatorio</span>
+                    <span class="form-error">{{ getFieldError('postalCode') }}</span>
                   }
                 </div>
 
                 <div class="form-field">
                   <label class="form-label" for="street">Calle *</label>
                   <input id="street" class="form-input" [class.form-input--error]="isFieldInvalid('street')"
-                    type="text" formControlName="street" placeholder="Av. Corrientes" />
+                    type="text" formControlName="street" placeholder="Av. Corrientes"
+                    autocomplete="address-line1" maxlength="100" />
                   @if (isFieldInvalid('street')) {
-                    <span class="form-error">La calle es obligatoria</span>
+                    <span class="form-error">{{ getFieldError('street') }}</span>
                   }
                 </div>
 
                 <div class="form-field">
                   <label class="form-label" for="streetNumber">Número *</label>
                   <input id="streetNumber" class="form-input" [class.form-input--error]="isFieldInvalid('streetNumber')"
-                    type="text" formControlName="streetNumber" placeholder="1234" />
+                    type="text" formControlName="streetNumber" placeholder="1234"
+                    autocomplete="address-line2" inputmode="numeric" maxlength="7" />
                   @if (isFieldInvalid('streetNumber')) {
-                    <span class="form-error">El número es obligatorio</span>
+                    <span class="form-error">{{ getFieldError('streetNumber') }}</span>
                   }
                 </div>
 
                 <div class="form-field">
                   <label class="form-label" for="apartment">Piso / Depto <span class="form-label--optional">(opcional)</span></label>
-                  <input id="apartment" class="form-input" type="text" formControlName="apartment" placeholder="2° B" />
+                  <input id="apartment" class="form-input" [class.form-input--error]="isFieldInvalid('apartment')"
+                    type="text" formControlName="apartment" placeholder="2° B" maxlength="30" />
+                  @if (isFieldInvalid('apartment')) {
+                    <span class="form-error">{{ getFieldError('apartment') }}</span>
+                  }
                 </div>
               </div>
 
@@ -226,8 +237,11 @@
           <!-- Observaciones -->
           <section class="checkout-section">
             <h2 class="checkout-section__title">Observaciones</h2>
-            <textarea class="form-input form-textarea" formControlName="notes"
-              placeholder="Alguna indicación especial para tu pedido (opcional)..."></textarea>
+            <textarea class="form-input form-textarea" [class.form-input--error]="isFieldInvalid('notes')" formControlName="notes"
+              placeholder="Alguna indicación especial para tu pedido (opcional)..." maxlength="500"></textarea>
+            @if (isFieldInvalid('notes')) {
+              <span class="form-error">{{ getFieldError('notes') }}</span>
+            }
           </section>
 
           @if (errorMsg()) {

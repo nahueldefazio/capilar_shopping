@@ -1,11 +1,24 @@
 import { Component, inject, signal, ElementRef, OnDestroy } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { Subject, debounceTime, takeUntil, merge } from 'rxjs';
 import { CartStore } from '../../core/services/cart.store';
 import { ShippingService } from '../../core/services/shipping.service';
 import { Customer, ShippingCalculationResult } from '../../core/models';
 import { CurrencyArPipe } from '../../shared/pipes/currency-ar.pipe';
+
+const NAME_PATTERN = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+(?:[ '-][A-Za-zÁÉÍÓÚÜÑáéíóúüñ]+)+$/;
+const CITY_PATTERN = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 .'-]{2,80}$/;
+const STREET_PATTERN = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 .'-]{2,100}$/;
+const POSTAL_CODE_PATTERN = /^[A-Za-z0-9]{4,8}$/;
+const STREET_NUMBER_PATTERN = /^[1-9][0-9]{0,5}[A-Za-z]?$/;
+const APARTMENT_PATTERN = /^[A-Za-z0-9 .°º/-]{0,30}$/;
 
 @Component({
   selector: 'app-checkout',
@@ -29,19 +42,25 @@ export class CheckoutComponent implements OnDestroy {
   shippingResult = signal<ShippingCalculationResult | null>(null);
 
   form = this.fb.group({
-    fullName: ['', [Validators.required, Validators.minLength(3)]],
-    email: ['', [Validators.required, Validators.email]],
-    phone: ['', [Validators.required, Validators.pattern(/^\d{7,15}$/)]],
+    fullName: ['', [
+      Validators.required,
+      Validators.minLength(5),
+      Validators.maxLength(80),
+      this.noWhitespaceValidator,
+      Validators.pattern(NAME_PATTERN),
+    ]],
+    email: ['', [Validators.required, Validators.email, Validators.maxLength(120)]],
+    phone: ['', [Validators.required, this.phoneValidator]],
     customerType: ['retail' as Customer['customerType'], Validators.required],
     province: ['', Validators.required],
-    city: ['', Validators.required],
-    postalCode: ['', Validators.required],
-    street: ['', Validators.required],
-    streetNumber: ['', Validators.required],
-    apartment: [''],
+    city: [''],
+    postalCode: [''],
+    street: [''],
+    streetNumber: [''],
+    apartment: ['', [Validators.maxLength(30), Validators.pattern(APARTMENT_PATTERN)]],
     deliveryMethod: ['home_delivery', Validators.required],
     paymentMethod: ['mercadopago', Validators.required],
-    notes: [''],
+    notes: ['', Validators.maxLength(500)],
   });
 
   constructor() {
@@ -126,13 +145,37 @@ export class CheckoutComponent implements OnDestroy {
   }
 
   private syncAddressValidators(method: string | null): void {
-    const addressFields = ['province', 'city', 'postalCode', 'street', 'streetNumber'];
     const needsAddress = method === 'home_delivery';
+    const validatorsByField = {
+      province: [Validators.required],
+      city: [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(80),
+        this.noWhitespaceValidator,
+        Validators.pattern(CITY_PATTERN),
+      ],
+      postalCode: [
+        Validators.required,
+        Validators.pattern(POSTAL_CODE_PATTERN),
+      ],
+      street: [
+        Validators.required,
+        Validators.minLength(2),
+        Validators.maxLength(100),
+        this.noWhitespaceValidator,
+        Validators.pattern(STREET_PATTERN),
+      ],
+      streetNumber: [
+        Validators.required,
+        Validators.pattern(STREET_NUMBER_PATTERN),
+      ],
+    };
 
-    for (const field of addressFields) {
+    for (const [field, validators] of Object.entries(validatorsByField)) {
       const control = this.form.get(field);
       if (!control) continue;
-      control.setValidators(needsAddress ? [Validators.required] : []);
+      control.setValidators(needsAddress ? validators : []);
       control.updateValueAndValidity({ emitEvent: false });
     }
   }
@@ -143,6 +186,8 @@ export class CheckoutComponent implements OnDestroy {
   }
 
   onSubmit(): void {
+    this.trimFormValues();
+
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       setTimeout(() => {
@@ -173,5 +218,54 @@ export class CheckoutComponent implements OnDestroy {
         shippingResult: this.shippingResult(),
       },
     });
+  }
+
+  getFieldError(field: string): string {
+    const control = this.form.get(field);
+    if (!control?.errors) return '';
+
+    if (control.errors['required'] || control.errors['whitespace']) return 'Este dato es obligatorio';
+    if (control.errors['email']) return 'Ingresá un email válido';
+    if (control.errors['maxlength']) return `Máximo ${control.errors['maxlength'].requiredLength} caracteres`;
+    if (control.errors['minlength']) return `Mínimo ${control.errors['minlength'].requiredLength} caracteres`;
+    if (control.errors['invalidPhone']) return 'Ingresá un teléfono válido, con código de área';
+
+    const patternMessages: Record<string, string> = {
+      fullName: 'Ingresá nombre y apellido, solo con letras',
+      city: 'Ingresá una localidad válida',
+      postalCode: 'Ingresá un código postal válido',
+      street: 'Ingresá una calle válida',
+      streetNumber: 'Ingresá un número válido',
+      apartment: 'Ingresá un piso/depto válido',
+    };
+
+    return patternMessages[field] ?? 'Revisá este dato';
+  }
+
+  private trimFormValues(): void {
+    const nextValue = Object.fromEntries(
+      Object.entries(this.form.value).map(([key, value]) => [
+        key,
+        typeof value === 'string' ? value.trim().replace(/\s+/g, ' ') : value,
+      ]),
+    );
+    this.form.patchValue(nextValue, { emitEvent: false });
+  }
+
+  private noWhitespaceValidator(control: AbstractControl): ValidationErrors | null {
+    const value = String(control.value ?? '');
+    return value.trim().length === 0 ? { whitespace: true } : null;
+  }
+
+  private phoneValidator(control: AbstractControl): ValidationErrors | null {
+    const value = String(control.value ?? '').trim();
+    if (!value) return null;
+    if (!/^\+?[\d\s().-]+$/.test(value)) return { invalidPhone: true };
+
+    const digits = value.replace(/\D/g, '');
+    if (digits.length < 8 || digits.length > 15) return { invalidPhone: true };
+    if (/^(\d)\1+$/.test(digits)) return { invalidPhone: true };
+
+    return null;
   }
 }
