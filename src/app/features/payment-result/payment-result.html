@@ -12,6 +12,9 @@
           <p class="payment-result__ref">Pedido: <strong>{{ orderNumber() }}</strong></p>
         }
         <div class="payment-result__actions">
+          @if (orderId() && orderToken()) {
+            <a class="btn btn--primary btn--lg" [routerLink]="['/confirmacion', orderId()]" [queryParams]="{ token: orderToken() }">Ver pedido</a>
+          }
           <a class="btn btn--primary btn--lg" routerLink="/">Volver al inicio</a>
           <a class="btn btn--outline btn--lg" routerLink="/productos">Seguir comprando</a>
         </div>
@@ -27,6 +30,9 @@
           <p class="payment-result__ref">Pedido: <strong>{{ orderNumber() }}</strong></p>
         }
         <div class="payment-result__actions">
+          @if (orderId() && orderToken()) {
+            <a class="btn btn--outline btn--lg" [routerLink]="['/confirmacion', orderId()]" [queryParams]="{ token: orderToken() }">Ver pedido</a>
+          }
           <a class="btn btn--primary btn--lg" routerLink="/">Volver al inicio</a>
         </div>
       }

@@ -17,15 +17,24 @@ export class PaymentResultComponent implements OnInit {
 
   status = signal<ResultStatus>('unknown');
   orderNumber = signal('');
+  orderId = signal('');
+  orderToken = signal('');
   paymentId = signal('');
 
   ngOnInit(): void {
     const params = this.route.snapshot.queryParamMap;
     const collectionStatus = params.get('collection_status') ?? params.get('status') ?? '';
     const externalRef = params.get('external_reference') ?? '';
+    const orderId = params.get('order_id') ?? '';
+    const orderToken = params.get('token') ?? '';
     const mpPaymentId = params.get('collection_id') ?? params.get('payment_id') ?? '';
 
     this.orderNumber.set(externalRef);
+    this.orderId.set(orderId);
+    this.orderToken.set(orderToken);
+    if (orderId && orderToken) {
+      sessionStorage.setItem(`order_token_${orderId}`, orderToken);
+    }
     this.paymentId.set(mpPaymentId);
 
     if (collectionStatus === 'approved') {

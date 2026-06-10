@@ -1,0 +1,74 @@
+<div class="legal-page">
+  <div class="container legal-page__container">
+    @if (page === 'withdrawal') {
+      <header class="legal-page__header">
+        <h1>Boton de arrepentimiento</h1>
+        <p>
+          Desde este formulario podés solicitar la revocacion de una compra realizada en Capilar Shopping.
+        </p>
+      </header>
+
+      @if (submittedCode()) {
+        <section class="legal-success">
+          <strong>Solicitud registrada</strong>
+          <p>Tu codigo de tramite es <span>{{ submittedCode() }}</span>.</p>
+        </section>
+      }
+
+      <form class="legal-form" [formGroup]="form" (ngSubmit)="submitWithdrawal()">
+        <div class="legal-form__grid">
+          <label>
+            Nombre completo *
+            <input type="text" formControlName="fullName" />
+            @if (isInvalid('fullName')) { <small>Ingresá tu nombre.</small> }
+          </label>
+
+          <label>
+            Email *
+            <input type="email" formControlName="email" />
+            @if (isInvalid('email')) { <small>Ingresá un email valido.</small> }
+          </label>
+
+          <label>
+            Telefono
+            <input type="tel" formControlName="phone" />
+          </label>
+
+          <label>
+            Numero de pedido
+            <input type="text" formControlName="orderNumber" placeholder="CAP-..." />
+          </label>
+        </div>
+
+        <label>
+          Mensaje
+          <textarea rows="5" formControlName="message"></textarea>
+        </label>
+
+        @if (errorMsg()) {
+          <p class="legal-form__error">{{ errorMsg() }}</p>
+        }
+
+        <button class="btn btn--primary btn--lg" type="submit" [disabled]="submitting()">
+          {{ submitting() ? 'Enviando...' : 'Enviar solicitud' }}
+        </button>
+      </form>
+    } @else if (content) {
+      <header class="legal-page__header">
+        <h1>{{ content.title }}</h1>
+        <p>{{ content.intro }}</p>
+      </header>
+
+      <div class="legal-content">
+        @for (section of content.sections; track section.title) {
+          <section>
+            <h2>{{ section.title }}</h2>
+            <p>{{ section.body }}</p>
+          </section>
+        }
+      </div>
+    }
+
+    <a class="legal-page__back" routerLink="/">Volver al inicio</a>
+  </div>
+</div>

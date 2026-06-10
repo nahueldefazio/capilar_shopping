@@ -45,8 +45,17 @@ export class CheckoutComponent implements OnDestroy {
   });
 
   constructor() {
+    this.syncAddressValidators(this.form.get('deliveryMethod')!.value);
+
+    this.form
+      .get('deliveryMethod')!
+      .valueChanges.pipe(takeUntil(this.destroy$))
+      .subscribe((method) => {
+        this.syncAddressValidators(method);
+        this.recalculateShipping();
+      });
+
     merge(
-      this.form.get('deliveryMethod')!.valueChanges,
       this.form.get('province')!.valueChanges,
       this.form.get('city')!.valueChanges,
       this.form.get('postalCode')!.valueChanges,
@@ -114,6 +123,18 @@ export class CheckoutComponent implements OnDestroy {
         },
         error: () => this.calculatingShipping.set(false),
       });
+  }
+
+  private syncAddressValidators(method: string | null): void {
+    const addressFields = ['province', 'city', 'postalCode', 'street', 'streetNumber'];
+    const needsAddress = method === 'home_delivery';
+
+    for (const field of addressFields) {
+      const control = this.form.get(field);
+      if (!control) continue;
+      control.setValidators(needsAddress ? [Validators.required] : []);
+      control.updateValueAndValidity({ emitEvent: false });
+    }
   }
 
   isFieldInvalid(field: string): boolean {

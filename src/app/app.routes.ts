@@ -44,6 +44,26 @@ export const routes: Routes = [
       import('./features/payment-result/payment-result').then((m) => m.PaymentResultComponent),
   },
   {
+    path: 'terminos-y-condiciones',
+    loadComponent: () => import('./features/legal/legal-page').then((m) => m.LegalPageComponent),
+    data: { page: 'terms' },
+  },
+  {
+    path: 'privacidad',
+    loadComponent: () => import('./features/legal/legal-page').then((m) => m.LegalPageComponent),
+    data: { page: 'privacy' },
+  },
+  {
+    path: 'cambios-y-devoluciones',
+    loadComponent: () => import('./features/legal/legal-page').then((m) => m.LegalPageComponent),
+    data: { page: 'returns' },
+  },
+  {
+    path: 'boton-de-arrepentimiento',
+    loadComponent: () => import('./features/legal/legal-page').then((m) => m.LegalPageComponent),
+    data: { page: 'withdrawal' },
+  },
+  {
     path: 'confirmacion/:id',
     loadComponent: () =>
       import('./features/order-confirmation/order-confirmation').then((m) => m.OrderConfirmationComponent),

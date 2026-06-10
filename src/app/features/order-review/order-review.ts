@@ -140,11 +140,13 @@ export class OrderReviewComponent implements OnInit {
       this.cartStore.items()
     ).subscribe({
       next: (order) => {
+        const publicToken = order.publicToken ?? '';
         if (s.paymentMethod === 'mercadopago') {
           this.orderService.createMercadoPagoPreference(Number(order.id)).subscribe({
             next: ({ initPoint }) => {
               this.submitting.set(false);
               this.redirectingToMP.set(true);
+              if (publicToken) sessionStorage.setItem(`order_token_${order.id}`, publicToken);
               this.cartStore.clearCart();
               window.location.href = initPoint;
             },
@@ -154,10 +156,16 @@ export class OrderReviewComponent implements OnInit {
             },
           });
         } else {
+          if (publicToken) sessionStorage.setItem(`order_token_${order.id}`, publicToken);
           this.submitting.set(false);
-          this.router.navigate(['/confirmacion', order.id], { state: { order } }).then(() => {
-            this.cartStore.clearCart();
-          });
+          this.router
+            .navigate(['/confirmacion', order.id], {
+              queryParams: publicToken ? { token: publicToken } : undefined,
+              state: { order },
+            })
+            .then(() => {
+              this.cartStore.clearCart();
+            });
         }
       },
       error: () => {

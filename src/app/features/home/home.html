@@ -61,13 +61,9 @@
   <div class="container">
     <h2 class="section__title">Categorías</h2>
     <div class="categories__grid">
-      <a class="category-card" routerLink="/productos" [queryParams]="{ categoria: 'cuidado-capilar' }">
+      <a class="category-card" routerLink="/productos" [queryParams]="{ tipo: 'retail' }">
         <span class="category-card__icon">🧴</span>
-        <span class="category-card__name">Cuidado Capilar</span>
-      </a>
-      <a class="category-card" routerLink="/productos" [queryParams]="{ categoria: 'tratamientos' }">
-        <span class="category-card__icon">💆</span>
-        <span class="category-card__name">Tratamientos</span>
+        <span class="category-card__name">Particular</span>
       </a>
       <a class="category-card" routerLink="/productos" [queryParams]="{ tipo: 'salon' }">
         <span class="category-card__icon">✂</span>
@@ -109,7 +105,7 @@
 <section class="section combos-section">
   <div class="container">
     <div class="section__header">
-      <h2 class="section__title">Combos armados para cada necesidad</h2>
+      <h2 class="section__title">Combos recomendados para cada necesidad</h2>
       <a class="section__link" routerLink="/combos">Ver todos →</a>
     </div>
     <div class="combos-grid">
@@ -181,8 +177,7 @@
         <p class="promo-banner__eyebrow">Para peluquerías y salones</p>
         <h2 class="promo-banner__title">Abastecé tu salón con precios especiales</h2>
         <p class="promo-banner__text">
-          Packs por 6 unidades, combos armados y precios preferenciales para profesionales.
-          Pedidos mínimos bajos y entrega coordinada.
+          Pack, combos, precios preferenciales para profesionales y entrega coordinada.
         </p>
         <a class="btn btn--primary" [routerLink]="['/productos']" [queryParams]="{ tipo: 'salon' }">
           Ver productos para peluquerías
@@ -204,8 +199,7 @@
         <p class="promo-banner__eyebrow">Venta mayorista</p>
         <h2 class="promo-banner__title">Empezá tu negocio capilar</h2>
         <p class="promo-banner__text">
-          Cajas por 12 unidades, combos revendedor y los mejores precios del mercado.
-          Ideal para revendedores y distribuidores.
+          Combos revendedores y distribuidores con el mejor precio del mercado.
         </p>
         <div class="promo-banner__actions">
           <a class="btn btn--primary" [routerLink]="['/productos']" [queryParams]="{ tipo: 'wholesale' }">

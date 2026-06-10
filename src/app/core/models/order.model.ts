@@ -45,6 +45,7 @@ export interface OrderItem {
 export interface Order {
   id: string;
   orderNumber: string;
+  publicToken?: string;
   customer: Customer;
   items: OrderItem[];
   shipping?: OrderShipping;
@@ -54,6 +55,7 @@ export interface Order {
   total: number;
   status: OrderStatus;
   paymentStatus: PaymentStatus;
+  stockDeducted?: boolean;
   paymentMethod: PaymentMethod;
   deliveryMethod: DeliveryMethod;
   notes: string;

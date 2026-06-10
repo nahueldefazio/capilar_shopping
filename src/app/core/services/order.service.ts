@@ -58,8 +58,10 @@ export class OrderService {
     );
   }
 
-  getOrderById(id: string): Observable<Order> {
-    return this.http.get<Order>(`${this.base}/checkout/order/${id}`);
+  getOrderById(id: string, token: string): Observable<Order> {
+    return this.http.get<Order>(`${this.base}/checkout/order/${id}`, {
+      params: { token },
+    });
   }
 
   updateOrderStatus(id: string, status: OrderStatus): Observable<Order> {

@@ -29,7 +29,17 @@ export class OrderConfirmationComponent implements OnInit {
     }
     this.loading.set(true);
     const id = this.route.snapshot.params['id'];
-    this.orderService.getOrderById(id).subscribe({
+    const token =
+      this.route.snapshot.queryParamMap.get('token') ??
+      sessionStorage.getItem(`order_token_${id}`) ??
+      '';
+
+    if (!token) {
+      this.loading.set(false);
+      return;
+    }
+
+    this.orderService.getOrderById(id, token).subscribe({
       next: (order) => { this.order.set(order); this.loading.set(false); },
       error: () => this.loading.set(false),
     });
