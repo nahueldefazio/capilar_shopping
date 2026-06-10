@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://navajowhite-quetzal-176085.hostingersite.com/api',
+  apiUrl: 'https://capilarshopping-com-622134.hostingersite.com/api',
 };

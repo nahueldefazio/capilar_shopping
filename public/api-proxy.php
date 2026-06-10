@@ -44,7 +44,7 @@ curl_close($ch);
 
 if ($response === false || $httpCode === 0) {
     // Try to restart Node.js and retry once
-    $startScript = '/home/u616274976/domains/navajowhite-quetzal-176085.hostingersite.com/nodejs/start_api.sh';
+    $startScript = '/home/u616274976/domains/capilarshopping-com-622134.hostingersite.com/nodejs/start_api.sh';
     if (is_executable($startScript)) {
         shell_exec('bash ' . $startScript . ' > /dev/null 2>&1 &');
         sleep(3);
