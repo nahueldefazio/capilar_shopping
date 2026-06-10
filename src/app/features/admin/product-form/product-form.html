@@ -54,7 +54,7 @@
           <label class="form-label" for="categoryId">Categoría *</label>
           <select id="categoryId" class="form-input form-select" formControlName="categoryId">
             <option value="">Seleccioná una categoría</option>
-            @for (cat of categories(); track cat.id) {
+            @for (cat of categoryOptions(); track cat.id) {
               <option [value]="cat.id">{{ cat.name }}</option>
             }
           </select>

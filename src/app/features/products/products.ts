@@ -10,6 +10,12 @@ import { LoadingComponent } from '../../shared/components/loading/loading';
 type SortOption = 'default' | 'price-asc' | 'price-desc';
 type FilterSaleType = SaleType | 'all';
 
+const MAIN_CATEGORY_TO_SALE_TYPE: Record<string, FilterSaleType> = {
+  particulares: 'retail',
+  peluquerias: 'salon',
+  mayorista: 'wholesale',
+};
+
 @Component({
   selector: 'app-products',
   standalone: true,
@@ -23,6 +29,20 @@ export class ProductsComponent implements OnInit {
   private route = inject(ActivatedRoute);
 
   categories = this.categoryService.categories;
+  mainCategories = computed(() => this.categories().filter((category) => !category.parentId));
+  subcategories = computed(() => {
+    const categories = this.categories();
+    const selectedSaleType = this.selectedSaleType();
+    const selectedParent = this.mainCategories().find(
+      (category) => MAIN_CATEGORY_TO_SALE_TYPE[category.slug] === selectedSaleType
+    );
+
+    return categories.filter((category) => {
+      if (!category.parentId) return false;
+      if (selectedSaleType === 'all') return true;
+      return category.parentId === selectedParent?.id;
+    });
+  });
   searchQuery = signal('');
   selectedCategory = signal('todos');
   selectedSaleType = signal<FilterSaleType>('all');
@@ -66,6 +86,15 @@ export class ProductsComponent implements OnInit {
 
   selectSaleType(type: FilterSaleType): void {
     this.selectedSaleType.set(type);
+    this.selectedCategory.set('todos');
+  }
+
+  selectMainCategory(slug: string): void {
+    this.selectSaleType(MAIN_CATEGORY_TO_SALE_TYPE[slug] ?? 'all');
+  }
+
+  saleTypeForMainCategory(slug: string): FilterSaleType {
+    return MAIN_CATEGORY_TO_SALE_TYPE[slug] ?? 'all';
   }
 
   onSortChange(value: string): void {

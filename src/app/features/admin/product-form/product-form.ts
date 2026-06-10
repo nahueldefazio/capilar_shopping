@@ -1,9 +1,9 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { ProductService } from '../../../core/services/product.service';
 import { CategoryService } from '../../../core/services/category.service';
-import { Category, SaleType } from '../../../core/models';
+import { SaleType } from '../../../core/models';
 import { ImageUploadComponent } from '../../../shared/components/image-upload/image-upload';
 import { LoadingComponent } from '../../../shared/components/loading/loading';
 
@@ -21,7 +21,17 @@ export class AdminProductFormComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  categories = signal<Category[]>([]);
+  categories = this.categoryService.categories;
+  categoryOptions = computed(() => {
+    const categories = this.categories();
+    const rootCategories = categories.filter((cat) => !cat.parentId);
+    const childCategories = categories.filter((cat) => cat.parentId);
+
+    return [
+      ...rootCategories,
+      ...childCategories.map((cat) => ({ ...cat, name: `${this.parentName(cat.parentId)} / ${cat.name}` })),
+    ];
+  });
   isEdit = signal(false);
   productId = signal<string | null>(null);
   saved = signal(false);
@@ -45,7 +55,6 @@ export class AdminProductFormComponent implements OnInit {
   ngOnInit(): void {
     this.productService.load();
     this.categoryService.load();
-    this.categories.set(this.categoryService.getCategories());
 
     const id = this.route.snapshot.params['id'];
     if (id) {
@@ -62,7 +71,7 @@ export class AdminProductFormComponent implements OnInit {
     });
 
     this.form.get('categoryId')?.valueChanges.subscribe((catId) => {
-      const cat = this.categories().find((c) => c.id === catId);
+      const cat = this.categories().find((c) => c.id === String(catId));
       if (cat) this.form.get('categoryName')?.setValue(cat.name, { emitEvent: false });
     });
   }
@@ -117,5 +126,9 @@ export class AdminProductFormComponent implements OnInit {
       .replace(/\s+/g, '-')
       .replace(/[^a-z0-9-]/g, '')
       .slice(0, 60);
+  }
+
+  private parentName(parentId: string | null | undefined): string {
+    return this.categories().find((cat) => cat.id === parentId)?.name ?? 'Principal';
   }
 }

@@ -141,6 +141,12 @@
       border-color: var(--clr-primary-light);
       font-weight: 600;
     }
+
+    &--child {
+      margin-left: 0.5rem;
+      padding-left: 1rem;
+      font-size: 0.84rem;
+    }
   }
 
   &__select {

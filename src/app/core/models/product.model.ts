@@ -11,6 +11,12 @@ export interface Product {
   categoryId: string;
   categoryName?: string;
   categorySlug?: string;
+  category?: {
+    id: string;
+    name: string;
+    slug: string;
+    parentId?: string | null;
+  };
   saleType: SaleType;
   imageUrl?: string;
   isActive: boolean;
